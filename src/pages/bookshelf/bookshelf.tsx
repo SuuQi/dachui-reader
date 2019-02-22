@@ -5,7 +5,7 @@ import { connect } from '@tarojs/redux'
 
 import { add, minus, asyncAdd } from '../../actions/counter'
 
-import './index.scss'
+import './bookshelf.scss'
 
 type PageStateProps = {
   counter: {
@@ -26,7 +26,7 @@ type PageState = {
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Index {
+interface Bookshelf {
   props: IProps
   state: PageState
 }
@@ -44,10 +44,10 @@ interface Index {
     dispatch(asyncAdd())
   }
 }))
-class Index extends Component {
+class Bookshelf extends Component {
 
   config: Config = {
-    navigationBarTitleText: '首页'
+    navigationBarTitleText: '书架'
   }
 
   componentWillReceiveProps (nextProps) {
@@ -73,4 +73,4 @@ class Index extends Component {
   }
 }
 
-export default Index as ComponentClass<PageOwnProps, PageState>
+export default Bookshelf as ComponentClass<PageOwnProps, PageState>
