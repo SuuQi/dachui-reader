@@ -2,26 +2,20 @@ import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-
-import { add, minus, asyncAdd } from '../../actions/counter'
+import { AtSearchBar } from 'taro-ui'
 
 import './bookstore.scss'
 
 type PageStateProps = {
-  counter: {
-    num: number
-  }
 }
 
 type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
 }
 
 type PageOwnProps = {}
 
 type PageState = {
+  searchString: string
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -32,20 +26,12 @@ interface Bookstore {
 }
 
 @connect(({ counter }) => ({
-  counter
 }), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
-  }
 }))
 class Bookstore extends Component {
-
+  state = {
+    searchString: ''
+  }
   config: Config = {
     navigationBarTitleText: '书城'
   }
@@ -60,14 +46,20 @@ class Bookstore extends Component {
 
   componentDidHide () { }
 
+  handleSearchChange = (searchString) => {
+    this.setState({
+      searchString
+    })
+  }
+
   render () {
+    const { searchString } = this.state
     return (
-      <View className='index'>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View>
-        <View><Text>Hello, World</Text></View>
+      <View className='bookstore'>
+        <AtSearchBar
+          value={searchString}
+          onChange={this.handleSearchChange}
+        />
       </View>
     )
   }
