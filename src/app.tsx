@@ -6,6 +6,7 @@ import Index from './pages/index'
 
 import configStore from './store'
 
+import 'taro-ui/dist/style/index.scss'
 import './app.scss'
 
 /** fix window 变量报错 */
