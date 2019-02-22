@@ -35,6 +35,7 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/index/index',
+      'pages/bookstore/bookstore',
       'pages/bookshelf/bookshelf'
     ],
     tabBar: {
@@ -42,6 +43,10 @@ class App extends Component {
         {
           pagePath: 'pages/index/index',
           text: '首页'
+        },
+        {
+          pagePath: 'pages/bookstore/bookstore',
+          text: '书城'
         },
         {
           pagePath: 'pages/bookshelf/bookshelf',

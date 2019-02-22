@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "dachui-header",
   "description": "dachui-reader",
-  "appid": "touristappid",
+  "appid": "wx7954ed61e2edbfcc",
   "setting": {
     "urlCheck": true,
     "es6": false,
