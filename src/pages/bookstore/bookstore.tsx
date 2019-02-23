@@ -85,6 +85,7 @@ class Bookstore extends Component {
           fixed
           value={searchString}
           onChange={this.handleSearchStringChange}
+          onConfirm={this.handleSearchClick}
           onActionClick={this.handleSearchClick}
         />
         <AtList>
