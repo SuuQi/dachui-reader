@@ -3,5 +3,8 @@ export const FETCH_REQUESTED = Symbol('FETCH_REQUESTED')
 export const FETCH_SUCCEEDED = Symbol('FETCH_SUCCEEDED')
 export const FETCH_FAILED = Symbol('FETCH_FAILED')
 
-/** http请求中没有请求体的请求类型集合 */
-export const PARAMS_METHOD = ['get', 'delete', 'GET', 'DELETE'];
+export type HTTP_METHOD = 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT'
+
+export const SERVER_API_ROOT = 'https://queenlan.cn/api/book-api'
+// export const SERVER_STATICS_ROOT = 'https://queenlan.cn/api/book-statics'
+export const SERVER_STATICS_ROOT = 'https://statics.zhuishushenqi.com'

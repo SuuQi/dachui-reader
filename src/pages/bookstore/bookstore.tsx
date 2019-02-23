@@ -1,15 +1,26 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import { AtSearchBar, AtMessage } from 'taro-ui'
+import { AtSearchBar, AtMessage, AtList, AtListItem } from 'taro-ui'
 
 import './bookstore.scss'
+import { fuzzySearch, clearFuzzySearch } from '../../actions/book';
+import { SERVER_STATICS_ROOT } from '../../constants';
 
 type PageStateProps = {
+  searchList: Array<{
+    _id: string
+    title: string
+    cover: string
+    shortIntro: string
+  }>
+  searchListCount: number
 }
 
 type PageDispatchProps = {
+  fuzzySearch: (query: string) => any
+  clearFuzzySearch: () => any
 }
 
 type PageOwnProps = {}
@@ -25,8 +36,11 @@ interface Bookstore {
   state: PageState
 }
 
-@connect(({ counter }) => ({
+@connect(({ book }) => ({
+  ...book
 }), (dispatch) => ({
+  fuzzySearch: (query: string) => dispatch(fuzzySearch(query)),
+  clearFuzzySearch: () => dispatch(clearFuzzySearch())
 }))
 class Bookstore extends Component {
   state = {
@@ -46,21 +60,48 @@ class Bookstore extends Component {
 
   componentDidHide () { }
 
-  handleSearchChange = (searchString) => {
+  handleSearchStringChange = (searchString) => {
     this.setState({
       searchString
     })
   }
 
+  handleSearchClick = ()  => {
+    this.props.clearFuzzySearch()
+    this.props.fuzzySearch(this.state.searchString)
+  }
+
+  handleSearchClear = () => {
+    this.props.clearFuzzySearch()
+  }
+
   render () {
     const { searchString } = this.state
+    const { searchList } = this.props
     return (
       <View className='bookstore'>
         <AtMessage />
         <AtSearchBar
+          fixed
           value={searchString}
-          onChange={this.handleSearchChange}
+          onChange={this.handleSearchStringChange}
+          onActionClick={this.handleSearchClick}
         />
+        <AtList>
+          {
+            searchList.slice(0, 20).map(book => 
+              <AtListItem
+                key={`bookitem-${book._id}`}
+                title={book.title}
+                note={book.shortIntro}
+                extraText='查看'
+                arrow='right'
+                thumb={`${SERVER_STATICS_ROOT}${book.cover}`}
+              />  
+            )
+          }
+          
+        </AtList>
       </View>
     )
   }

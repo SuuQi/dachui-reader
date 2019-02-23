@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './index.scss'
@@ -47,7 +47,7 @@ class Index extends Component {
     return (
       <View className='index'>
         <AtMessage />
-        <View><Text>Hello, 首页</Text></View>
+        <View>Hello, 首页</View>
       </View>
     )
   }

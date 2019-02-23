@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
@@ -47,7 +47,7 @@ class Bookshelf extends Component {
     return (
       <View className='bookshelf'>
         <AtMessage />
-        <View><Text>Hello, 书架</Text></View>
+        <View>Hello, 书架</View>
       </View>
     )
   }

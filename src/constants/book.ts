@@ -1,3 +1,3 @@
 
-export const SERVER_API_ROOT = 'https://queenlan.cn/api/book-api'
 export const FETCH_FUZZY_SEARCH = Symbol('FETCH_FUZZY_SEARCH')
+export const CLEAR_FUZZY_SEARCH = Symbol('CLEAR_FUZZY_SEARCH')
