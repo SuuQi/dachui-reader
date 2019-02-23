@@ -4,6 +4,7 @@ import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
+import { AtMessage } from 'taro-ui';
 
 type PageStateProps = {
 }
@@ -45,6 +46,7 @@ class Bookshelf extends Component {
   render () {
     return (
       <View className='bookshelf'>
+        <AtMessage />
         <View><Text>Hello, 书架</Text></View>
       </View>
     )

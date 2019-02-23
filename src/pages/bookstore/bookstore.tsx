@@ -2,7 +2,7 @@ import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import { AtSearchBar } from 'taro-ui'
+import { AtSearchBar, AtMessage } from 'taro-ui'
 
 import './bookstore.scss'
 
@@ -56,6 +56,7 @@ class Bookstore extends Component {
     const { searchString } = this.state
     return (
       <View className='bookstore'>
+        <AtMessage />
         <AtSearchBar
           value={searchString}
           onChange={this.handleSearchChange}
