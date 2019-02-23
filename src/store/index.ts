@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import createSagaMiddleware from 'redux-saga'
+import thunkMiddleware from 'redux-thunk'
 import rootReducer from '../reducers'
 
 const composeEnhancers =
@@ -9,10 +9,8 @@ const composeEnhancers =
       // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
     }) : compose
 
-const sagaMiddleware = createSagaMiddleware()
-
 const middlewares = [
-  sagaMiddleware
+  thunkMiddleware
 ]
 
 if (process.env.NODE_ENV === 'development') {
