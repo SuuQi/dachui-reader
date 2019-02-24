@@ -34,11 +34,13 @@ export default class Catelogue extends Component {
   state: ComponentState = {
   }
 
-  handleItemClick = (i: number, chapter: IChapterOrigin) => () => {
-    if (i === this.props.activeIndex) return
-    this.props.onItemClick!(i, chapter)
-    this.props.onClose!()
-  }
+  handleItemClick (i: number, chapter: IChapterOrigin) {
+    return () => {
+      if (i === this.props.activeIndex) return
+      this.props.onItemClick!(i, chapter)
+      this.props.onClose!()
+    }
+  } 
 
   render () {
     const { chaptersData, show, activeIndex } = this.props
