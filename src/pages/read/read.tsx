@@ -7,7 +7,7 @@ import pick from 'lodash/pick'
 import './read.scss'
 import { IChaptersData, IChapterItem, IChapterOrigin } from '../../constants/book';
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book';
-import { AtList, AtListItem, AtDrawer } from 'taro-ui';
+import Catelogue from '../../componts/catelogue/catelogue';
 
 type PageStateProps = {
 }
@@ -89,12 +89,12 @@ class ReadPage extends Component {
     const { chaptersData, chapter, drawShow } = this.state;
     return (
       <View className='read'>
-        <AtDrawer
+        <Catelogue
           show={drawShow}
-          mask
-          items={chaptersData.chapters.slice(0, 20).map(chapter => chapter.title)}
+          activeIndex={chapter.index}
+          chaptersData={chaptersData}
+          onItemClick={this.loadChapter}
           onClose={() => this.setState({ drawShow: false })}
-          onItemClick={(index) => this.loadChapter(index)}
         />
         <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
         <View className='at-article'>

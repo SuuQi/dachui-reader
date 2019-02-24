@@ -1,0 +1,18 @@
+
+@import '~taro-ui/dist/style/variables/default.scss';
+@import '~taro-ui/dist/style/mixins/index.scss';
+
+.catelogue {
+  background-color: $color-bg;
+  
+  &__item {
+    padding: $spacing-v-lg $spacing-h-lg;
+    position: relative;
+    box-sizing: border-box;
+    color: $at-list-text-color;
+    font-size: $font-size-lg;
+    line-height: $line-height-zh;
+    @include line(1);
+    @include active;
+  }
+}
