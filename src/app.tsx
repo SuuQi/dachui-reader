@@ -33,16 +33,13 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/index/index',
       'pages/bookstore/bookstore',
-      'pages/bookshelf/bookshelf'
+      'pages/bookshelf/bookshelf',
+      'pages/index/index',
+      'pages/read/read'
     ],
     tabBar: {
       list: [
-        {
-          pagePath: 'pages/index/index',
-          text: '首页'
-        },
         {
           pagePath: 'pages/bookstore/bookstore',
           text: '书城'
@@ -50,6 +47,10 @@ class App extends Component {
         {
           pagePath: 'pages/bookshelf/bookshelf',
           text: '书架'
+        },
+        {
+          pagePath: 'pages/index/index',
+          text: '首页'
         }
       ]
     },

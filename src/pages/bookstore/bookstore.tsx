@@ -7,14 +7,10 @@ import { AtSearchBar, AtList, AtListItem } from 'taro-ui'
 import './bookstore.scss'
 import { fuzzySearch, clearFuzzySearch } from '../../actions/book';
 import { SERVER_STATICS_ROOT } from '../../constants';
+import { IBookItem } from '../../constants/book';
 
 type PageStateProps = {
-  searchList: Array<{
-    _id: string
-    title: string
-    cover: string
-    shortIntro: string
-  }>
+  searchList: IBookItem[]
   searchListCount: number
 }
 
@@ -49,16 +45,9 @@ class Bookstore extends Component {
   config: Config = {
     navigationBarTitleText: '书城'
   }
-
-  componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
+  componentWillUnmount () {
+    this.props.clearFuzzySearch()
   }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
 
   handleSearchStringChange = (searchString) => {
     this.setState({
@@ -73,6 +62,10 @@ class Bookstore extends Component {
 
   handleSearchClear = () => {
     this.props.clearFuzzySearch()
+  }
+
+  handleBookItemClick = (book: IBookItem) => {
+    Taro.navigateTo({ url: `/pages/read/read?id=${book._id}&title=${book.title}` })
   }
 
   render () {
@@ -97,7 +90,8 @@ class Bookstore extends Component {
                 extraText='查看'
                 arrow='right'
                 thumb={`${SERVER_STATICS_ROOT}${book.cover}`}
-              />  
+                onClick={() => this.handleBookItemClick(book)}
+              />
             )
           }
           
