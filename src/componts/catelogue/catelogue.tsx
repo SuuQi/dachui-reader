@@ -34,8 +34,14 @@ export default class Catelogue extends Component {
   state: ComponentState = {
   }
 
+  handleItemClick = (i: number, chapter: IChapterOrigin) => () => {
+    if (i === this.props.activeIndex) return
+    this.props.onItemClick!(i, chapter)
+    this.props.onClose!()
+  }
+
   render () {
-    const { chaptersData, show } = this.props
+    const { chaptersData, show, activeIndex } = this.props
     return (
         <AtDrawer
           className='catelogue'
@@ -47,12 +53,9 @@ export default class Catelogue extends Component {
           {
             chaptersData && chaptersData.chapters.map((chapter, i) => 
               <View
-                className={classname('catelogue__item', )}
+                className={classname('catelogue__item', activeIndex === i ? 'catelogue__item--active' : 'catelogue__item--normal')}
                 key={`catelogue-item-${i}`}
-                onClick={() => {
-                  this.props.onItemClick!(i, chapter)
-                  this.props.onClose!()
-                }}
+                onClick={this.handleItemClick(i, chapter)}
               >
                 {chapter.title}
               </View>

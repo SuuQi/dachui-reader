@@ -12,7 +12,11 @@
     color: $at-list-text-color;
     font-size: $font-size-lg;
     line-height: $line-height-zh;
-    @include line(1);
-    @include active;
+    &--normal {
+      @include active;
+    }
+    &--active {
+      color: $color-error;
+    }
   }
 }
