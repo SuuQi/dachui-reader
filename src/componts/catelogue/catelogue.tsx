@@ -1,8 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import './catelogue.scss'
-import { AtList, AtListItem, AtDrawer } from 'taro-ui';
-import { IChaptersData, IChapterOrigin } from '../../constants/book';
-import { View } from '@tarojs/components';
+import { AtDrawer } from 'taro-ui'
+import classname from 'classname'
+import { IChaptersData, IChapterOrigin } from '../../constants/book'
+import { View } from '@tarojs/components'
 
 type DefaultProps = {
   onItemClick?: (i: number, chapter: IChapterOrigin) => void
@@ -46,16 +47,13 @@ export default class Catelogue extends Component {
           {
             chaptersData && chaptersData.chapters.map((chapter, i) => 
               <View
-                className='catelogue__item'
+                className={classname('catelogue__item', )}
                 key={`catelogue-item-${i}`}
                 onClick={() => {
                   this.props.onItemClick!(i, chapter)
                   this.props.onClose!()
                 }}
               >
-                {chapter.title}
-                {chapter.title}
-                {chapter.title}
                 {chapter.title}
               </View>
             )
