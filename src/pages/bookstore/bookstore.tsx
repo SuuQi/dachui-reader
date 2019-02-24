@@ -2,7 +2,7 @@ import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import { AtSearchBar, AtMessage, AtList, AtListItem } from 'taro-ui'
+import { AtSearchBar, AtList, AtListItem } from 'taro-ui'
 
 import './bookstore.scss'
 import { fuzzySearch, clearFuzzySearch } from '../../actions/book';
@@ -80,7 +80,6 @@ class Bookstore extends Component {
     const { searchList } = this.props
     return (
       <View className='bookstore'>
-        <AtMessage />
         <AtSearchBar
           fixed
           value={searchString}

@@ -4,7 +4,6 @@ import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './index.scss'
-import { AtMessage } from 'taro-ui';
 
 type PageStateProps = {
 }
@@ -24,7 +23,7 @@ interface Index {
   state: PageState
 }
 
-@connect(({ counter }) => ({
+@connect(() => ({
 }), (dispatch) => ({
 }))
 class Index extends Component {
@@ -46,7 +45,6 @@ class Index extends Component {
   render () {
     return (
       <View className='index'>
-        <AtMessage />
         <View>Hello, 首页</View>
       </View>
     )
