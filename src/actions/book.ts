@@ -1,6 +1,6 @@
 import { fetchAjax } from '../utils';
-import { FETCH_FUZZY_SEARCH, CLEAR_FUZZY_SEARCH, FETCH_BOOK_CHAPTERS } from '../constants/book';
-import { SERVER_API_ROOT } from '../constants';
+import { FETCH_FUZZY_SEARCH, CLEAR_FUZZY_SEARCH, FETCH_BOOK_CHAPTERS, FETCH_CHAPTER_TEXT } from '../constants/book';
+import { SERVER_API_ROOT, SERVER_CHAPTER_ROOT } from '../constants';
 
 export function fuzzySearch (query: string) {
     return fetchAjax({
@@ -22,7 +22,13 @@ export function clearFuzzySearch () {
 export function fetchBookChapters (bookId: string) {
     return fetchAjax({
         type: FETCH_BOOK_CHAPTERS,
-        showLoading: true,
         url: `${SERVER_API_ROOT}/mix-atoc/${bookId}?view=chapters`
+    })
+}
+
+export function fetchBookChapterText (link: string) {
+    return fetchAjax({
+        type: FETCH_CHAPTER_TEXT,
+        url: `${SERVER_CHAPTER_ROOT}/chapter/${encodeURIComponent(link)}`
     })
 }
