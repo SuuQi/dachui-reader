@@ -5,7 +5,7 @@ import { connect } from '@tarojs/redux'
 import pick from 'lodash/pick'
 
 import './read.scss'
-import { IChaptersData, IChapterItem } from '../../constants/book';
+import { IChaptersData, IChapterItem, IChapterOrigin } from '../../constants/book';
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book';
 import { AtList, AtListItem, AtDrawer } from 'taro-ui';
 
@@ -68,32 +68,36 @@ class ReadPage extends Component {
     })
     const { mixToc: chaptersData } = await fetchBookChapters(params.id)
     this.setState({ chaptersData })
-    await this.loadChapter(chaptersData.chapters[0], 0)
+    await this.loadChapter(0, chaptersData.chapters[0])
     Taro.hideLoading()
   }
 
-  loadChapter = async (chapter: IChapterItem, index: number) => {
+  loadChapter = async (index: number, originChapter?: IChapterOrigin ) => {
+    Taro.showLoading({ title: '正在加载...' })
     const { fetchBookChapterText } = this.props;
+    const chapter = (originChapter || this.state.chaptersData.chapters[index]) as IChapterItem;
     const chapterData = await fetchBookChapterText(chapter.link)
-    chapter.body = chapterData.chapter.body;
-    chapter.index = index;
-    this.setState({ chapter })
+    chapter.body = chapterData.chapter.body
+    chapter.index = index
+    this.setState({ chapter }, () => {
+      Taro.pageScrollTo({ scrollTop: 0, duration: 0 })
+      Taro.hideLoading()
+    })
   }
 
   render () {
     const { chaptersData, chapter, drawShow } = this.state;
-    console.log(chapter);
     return (
       <View className='read'>
         <AtDrawer
           show={drawShow}
           mask
           items={chaptersData.chapters.map(chapter => chapter.title)}
-          onItemClick={(index) => this.loadChapter(chaptersData.chapters[index], index)}
+          onItemClick={(index) => this.loadChapter(index)}
         />
         <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
         <View className='at-article'>
-          <View className='at-article__h1'>
+          <View className='at-article__h2'>
             {chapter.title}
           </View>
           <View className='at-article__content'>
@@ -104,6 +108,7 @@ class ReadPage extends Component {
             </View>
           </View>
         </View>
+        <Button onClick={() => this.loadChapter(chapter.index + 1)}>下一章</Button>
       </View>
     )
   }

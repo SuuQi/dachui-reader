@@ -9,11 +9,14 @@ export interface IBookItem {
   shortIntro: string
 }
 
-export interface IChapterItem {
-  index?: number
+export interface IChapterOrigin {
   title: string
   link: string
-  body?: string
+}
+
+export interface IChapterItem extends IChapterOrigin {
+  index: number
+  body: string
 }
 
 export interface IChaptersData {
@@ -21,7 +24,7 @@ export interface IChaptersData {
   book: string
   chaptersUpdated: string
   updated: string
-  chapters: IChapterItem[]
+  chapters: IChapterOrigin[]
 }
 
 export const FETCH_BOOK_CHAPTERS = Symbol('FETCH_BOOK_CHAPTERS')
