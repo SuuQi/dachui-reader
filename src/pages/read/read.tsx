@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import pick from 'lodash/pick'
 
@@ -91,6 +91,7 @@ class ReadPage extends Component {
           items={chaptersData.chapters.map(chapter => chapter.title)}
           onItemClick={(index) => this.loadChapter(chaptersData.chapters[index], index)}
         />
+        <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
         <View className='at-article'>
           <View className='at-article__h1'>
             {chapter.title}
