@@ -56,16 +56,16 @@ class ReadPage extends Component {
     const { chaptersData } = this.props;
     return (
       <View className='read'>
-      <AtList>
-        {
-          chaptersData.chapters.map((chapter, i) => 
-            <AtListItem
-              key={`chapter-${chaptersData._id}-${i}`}
-              title={chapter.title}
-            />
-          )
-        }
-      </AtList>
+        <AtList>
+          {
+            chaptersData.chapters.map((chapter, i) => 
+              <AtListItem
+                key={`chapter-${chaptersData._id}-${i}`}
+                title={chapter.title}
+              />
+            )
+          }
+        </AtList>
       </View>
     )
   }
