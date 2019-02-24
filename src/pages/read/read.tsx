@@ -92,7 +92,8 @@ class ReadPage extends Component {
         <AtDrawer
           show={drawShow}
           mask
-          items={chaptersData.chapters.map(chapter => chapter.title)}
+          items={chaptersData.chapters.slice(0, 20).map(chapter => chapter.title)}
+          onClose={() => this.setState({ drawShow: false })}
           onItemClick={(index) => this.loadChapter(index)}
         />
         <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
