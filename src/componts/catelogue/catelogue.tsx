@@ -35,11 +35,9 @@ export default class Catelogue extends Component {
   }
 
   handleItemClick (i: number, chapter: IChapterOrigin) {
-    return () => {
-      if (i === this.props.activeIndex) return
-      this.props.onItemClick!(i, chapter)
-      this.props.onClose!()
-    }
+    if (i === this.props.activeIndex) return
+    this.props.onItemClick!(i, chapter)
+    this.props.onClose!()
   } 
 
   render () {
@@ -57,7 +55,7 @@ export default class Catelogue extends Component {
               <View
                 className={classname('catelogue__item', activeIndex === i ? 'catelogue__item--active' : 'catelogue__item--normal')}
                 key={`catelogue-item-${i}`}
-                onClick={this.handleItemClick(i, chapter)}
+                onClick={() => this.handleItemClick(i, chapter)}
               >
                 {chapter.title}
               </View>
