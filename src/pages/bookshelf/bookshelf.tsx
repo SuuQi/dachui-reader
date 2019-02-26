@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
@@ -32,20 +32,20 @@ class Bookshelf extends Component {
     navigationBarTitleText: '书架'
   }
 
-  componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
+  componentWillMount () {
   }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
+  
+  async handleGetUserInfo (detail) {
+    console.log(detail)
+    const loginInfo = await Taro.login()
+    console.log(loginInfo)
+  }
 
   render () {
     return (
       <View className='bookshelf'>
         <View>Hello, 书架</View>
+        <Button onGetUserInfo={this.handleGetUserInfo} openType='getUserInfo'>获取用户信息</Button>
       </View>
     )
   }
