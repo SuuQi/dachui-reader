@@ -1,5 +1,5 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import thunkMiddleware from 'redux-thunk'
+import { createStore, applyMiddleware, compose, Action } from 'redux'
+import thunkMiddleware, { ThunkMiddleware } from 'redux-thunk'
 import rootReducer from '../reducers'
 
 const composeEnhancers =
@@ -22,7 +22,4 @@ const enhancer = composeEnhancers(
   // other store enhancers if any
 )
 
-export default function configStore () {
-  const store = createStore(rootReducer, enhancer)
-  return store
-}
+export default createStore(rootReducer, enhancer)

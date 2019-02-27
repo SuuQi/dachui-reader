@@ -1,10 +1,11 @@
 import '@tarojs/async-await'
+import 'weapp-cookie'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 
 import Index from './pages/index'
 
-import configStore from './store'
+import store from './store'
 import './app.scss'
 
 /** fix window 变量报错 */
@@ -19,9 +20,6 @@ declare global {
 // if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
 //   require('nerv-devtools')
 // }
-
-const store = configStore()
-
 class App extends Component {
 
   /**

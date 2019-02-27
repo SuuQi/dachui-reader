@@ -5,6 +5,7 @@
 import Taro from '@tarojs/taro'
 
 import { FETCH_REQUESTED, FETCH_SUCCEEDED, FETCH_FAILED, HTTP_METHOD } from '../constants'
+import { login } from './';
 
 /**
  * 异步ajax请求的action生成参数
@@ -53,13 +54,14 @@ export function fetchAjax ({ url, method = 'GET', type, data = {}, showLoading =
             throw new Error(`请求失败 code ${resData.statusCode}`)
         }
       })
-      .catch(e => {
+      .catch(async e => {
         dispatch({ type, status: FETCH_FAILED })
         showLoading && Taro.hideLoading()
-        // if (e.response && e.response.status === 401) {
-        //     // 401时重新登录
-        //     return false
-        // }
+        if (e.response && e.response.status === 401) {
+          // 未登录，登录后重新请求
+          await login()
+          return fetchAjax(arguments[0])
+        }
         // if (e.response && e.response.status === 403) {
         //     // 403弹出无权限
         //     return false

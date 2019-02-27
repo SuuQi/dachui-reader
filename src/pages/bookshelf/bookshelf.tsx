@@ -4,6 +4,7 @@ import { View, Button } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
+import { login } from '../../utils';
 
 type PageStateProps = {
 }
@@ -23,7 +24,7 @@ interface Bookshelf {
   state: PageState
 }
 
-@connect(({ counter }) => ({
+@connect(({}) => ({
 }), (dispatch) => ({
 }))
 class Bookshelf extends Component {
@@ -32,13 +33,15 @@ class Bookshelf extends Component {
     navigationBarTitleText: '书架'
   }
 
-  componentWillMount () {
+  async componentWillMount () {
+    await login()
+    // todo...
   }
   
   async handleGetUserInfo (detail) {
     console.log(detail)
-    const loginInfo = await Taro.login()
-    console.log(loginInfo)
+    // const loginInfo = await Taro.login()
+    // console.log(loginInfo)
   }
 
   render () {
