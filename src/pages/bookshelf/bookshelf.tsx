@@ -4,11 +4,15 @@ import { View, Button } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
+import { fetchUserBook } from '../../actions/user';
+import { IBookItem } from '../../constants/user';
 
 type PageStateProps = {
+  books: IBookItem[]
 }
 
 type PageDispatchProps = {
+  fetchUserBook: () => any
 }
 
 type PageOwnProps = {}
@@ -23,8 +27,10 @@ interface Bookshelf {
   state: PageState
 }
 
-@connect(({}) => ({
+@connect(({ user }) => ({
+  books: user.books
 }), (dispatch) => ({
+  fetchUserBook: () => dispatch(fetchUserBook())
 }))
 class Bookshelf extends Component {
 
@@ -32,7 +38,12 @@ class Bookshelf extends Component {
     navigationBarTitleText: '书架'
   }
 
+  async componentWillMount () {
+    this.props.fetchUserBook()
+  }
+
   render () {
+    console.log(this.props.books)
     return (
       <View className='bookshelf'>
         <View>Hello, 书架</View>

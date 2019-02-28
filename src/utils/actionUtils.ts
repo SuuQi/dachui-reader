@@ -6,6 +6,8 @@ import Taro from '@tarojs/taro'
 
 import { FETCH_REQUESTED, FETCH_SUCCEEDED, FETCH_FAILED, HTTP_METHOD } from '../constants'
 import { login } from './';
+import { SESSION_KEY } from '../constants/user';
+import store from '../store';
 
 /**
  * 异步ajax请求的action生成参数
@@ -28,7 +30,8 @@ interface AjaxData {
  */
 export function fetchAjax ({ url, method = 'GET', type, data = {}, showLoading = false }: AjaxData) {
   // 返回函数执行后返回ajax操作的promise，以返回值标识成功请求的的数据或者失败
-  return function (dispatch) {
+  return async function (dispatch) {
+    console.log(Taro.getStorageSync(SESSION_KEY))
     // 触发一次开始ajax的action
     dispatch({ type, status: FETCH_REQUESTED })
     showLoading && Taro.showLoading({
@@ -39,6 +42,9 @@ export function fetchAjax ({ url, method = 'GET', type, data = {}, showLoading =
     return Taro.request({
         url,
         method,
+        header: {
+          'x-reader-session': Taro.getStorageSync(SESSION_KEY) || ''
+        },
         data
       })
       .then(function (resData) {
@@ -51,16 +57,16 @@ export function fetchAjax ({ url, method = 'GET', type, data = {}, showLoading =
             showLoading && Taro.hideLoading()
             return resData.data
           default:
-            throw new Error(`请求失败 code ${resData.statusCode}`)
+            throw resData
         }
       })
       .catch(async e => {
         dispatch({ type, status: FETCH_FAILED })
         showLoading && Taro.hideLoading()
-        if (e.response && e.response.status === 401) {
+        if (e.statusCode === 401) {
           // 未登录，登录后重新请求
           await login()
-          return fetchAjax(arguments[0])
+          return store.dispatch( fetchAjax({ url, method, type, data, showLoading }) as any )
         }
         // if (e.response && e.response.status === 403) {
         //     // 403弹出无权限
@@ -68,13 +74,12 @@ export function fetchAjax ({ url, method = 'GET', type, data = {}, showLoading =
         // }
         // 全局的错误处理
         Taro.showToast({
-          title: `错误: ${e.message || e.errMsg}`,
+          title: `错误: ${e.statusCode || e.message || e.errMsg}`,
           duration: 3000,
           mask: true,
           icon: 'none'
         })
         return false
       })
-      
   }
 }
