@@ -4,7 +4,6 @@ import { View, Button } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
-import { login } from '../../utils';
 
 type PageStateProps = {
 }
@@ -33,22 +32,10 @@ class Bookshelf extends Component {
     navigationBarTitleText: '书架'
   }
 
-  async componentWillMount () {
-    await login()
-    // todo...
-  }
-  
-  async handleGetUserInfo (detail) {
-    console.log(detail)
-    // const loginInfo = await Taro.login()
-    // console.log(loginInfo)
-  }
-
   render () {
     return (
       <View className='bookshelf'>
         <View>Hello, 书架</View>
-        <Button onGetUserInfo={this.handleGetUserInfo} openType='getUserInfo'>获取用户信息</Button>
       </View>
     )
   }
