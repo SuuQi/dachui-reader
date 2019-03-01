@@ -5,10 +5,9 @@ import { connect } from '@tarojs/redux'
 import pick from 'lodash/pick'
 
 import './read.scss'
-import { IChaptersData, IChapterItem, IChapterOrigin } from '../../constants/book';
+import { IChaptersData, IChapterItem, IChapterOrigin, IUserBookItem } from '../../constants/book';
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book';
 import Catelogue from '../../componts/catelogue/catelogue';
-import { IBookItem } from '../../constants/user';
 import { addUserBook } from '../../actions/user';
 
 type PageStateProps = {
@@ -17,7 +16,7 @@ type PageStateProps = {
 type PageDispatchProps = {
   fetchBookChapters: (bookId: string) => any
   fetchBookChapterText: (link: string) => any
-  addUserBook: (book: IBookItem) => any
+  addUserBook: (book: IUserBookItem) => any
 }
 
 type PageOwnProps = {}
@@ -38,13 +37,13 @@ interface ReadPage {
 @connect(({ book }) => pick(book, []), (dispatch) => ({
   fetchBookChapters: (bookId: string) => dispatch(fetchBookChapters(bookId)),
   fetchBookChapterText: (link: string) => dispatch(fetchBookChapterText(link)),
-  addUserBook: (book: IBookItem) => dispatch(addUserBook(book))
+  addUserBook: (book: IUserBookItem) => dispatch(addUserBook(book))
 }))
 class ReadPage extends Component {
 
   state: PageState = {
     chaptersData: {
-      _id: '',
+      id: '',
       book: '',
       chaptersUpdated: '',
       updated: '',
@@ -71,6 +70,7 @@ class ReadPage extends Component {
       title: params.title
     })
     const { mixToc: chaptersData } = await fetchBookChapters(params.id)
+    chaptersData.id = chaptersData._id;
     this.setState({ chaptersData })
     await this.loadChapter(0, chaptersData.chapters[0])
     Taro.hideLoading()
@@ -91,7 +91,7 @@ class ReadPage extends Component {
 
   handleAddUserBook = async () => {
     await this.props.addUserBook({
-      id: this.state.chaptersData._id,
+      ...this.state.chaptersData,
       lastIndex: this.state.chapter.index
     })
     Taro.showToast({

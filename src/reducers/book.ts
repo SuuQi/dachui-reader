@@ -9,7 +9,10 @@ export default createReducer({
   [FETCH_FUZZY_SEARCH]: fetchHandle((state, action) => ({
     ...state,
     isFetching: false,
-    searchList: action.data.books || [],
+    searchList: action.data.books ? action.data.books.map(n => ({
+      ...n,
+      id: n._id
+    })) : [],
     searchListCount: action.data.count || 0
   })),
 

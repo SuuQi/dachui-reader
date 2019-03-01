@@ -65,7 +65,7 @@ class Bookstore extends Component {
   }
 
   handleBookItemClick = (book: IBookItem) => {
-    Taro.navigateTo({ url: `/pages/read/read?id=${book._id}&title=${book.title}` })
+    Taro.navigateTo({ url: `/pages/read/read?id=${book.id}&title=${book.title}` })
   }
 
   render () {
@@ -84,7 +84,7 @@ class Bookstore extends Component {
           {
             searchList.slice(0, 20).map(book => 
               <AtListItem
-                key={`bookitem-${book._id}`}
+                key={`bookitem-${book.id}`}
                 title={book.title}
                 note={book.shortIntro}
                 extraText='查看'

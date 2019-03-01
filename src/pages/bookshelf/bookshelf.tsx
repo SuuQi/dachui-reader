@@ -5,10 +5,10 @@ import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
 import { fetchUserBook } from '../../actions/user';
-import { IBookItem } from '../../constants/user';
+import { IUserBookItem } from '../../constants/book';
 
 type PageStateProps = {
-  books: IBookItem[]
+  books: IUserBookItem[]
 }
 
 type PageDispatchProps = {
