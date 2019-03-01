@@ -31,7 +31,6 @@ interface AjaxData {
 export function fetchAjax ({ url, method = 'GET', type, data = {}, showLoading = false }: AjaxData) {
   // 返回函数执行后返回ajax操作的promise，以返回值标识成功请求的的数据或者失败
   return async function (dispatch) {
-    console.log(Taro.getStorageSync(SESSION_KEY))
     // 触发一次开始ajax的action
     dispatch({ type, status: FETCH_REQUESTED })
     showLoading && Taro.showLoading({

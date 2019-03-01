@@ -8,7 +8,7 @@ import './read.scss'
 import { IChaptersData, IChapterItem, IChapterOrigin, IUserBookItem } from '../../constants/book';
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book';
 import Catelogue from '../../componts/catelogue/catelogue';
-import { addUserBook } from '../../actions/user';
+import { addUserBook, updateUserBook } from '../../actions/user';
 
 type PageStateProps = {
 }
@@ -17,6 +17,7 @@ type PageDispatchProps = {
   fetchBookChapters: (bookId: string) => any
   fetchBookChapterText: (link: string) => any
   addUserBook: (book: IUserBookItem) => any
+  updateUserBook: (book: Partial<IUserBookItem>) => any
 }
 
 type PageOwnProps = {}
@@ -37,7 +38,8 @@ interface ReadPage {
 @connect(({ book }) => pick(book, []), (dispatch) => ({
   fetchBookChapters: (bookId: string) => dispatch(fetchBookChapters(bookId)),
   fetchBookChapterText: (link: string) => dispatch(fetchBookChapterText(link)),
-  addUserBook: (book: IUserBookItem) => dispatch(addUserBook(book))
+  addUserBook: (book: IUserBookItem) => dispatch(addUserBook(book)),
+  updateUserBook: (book: Partial<IUserBookItem>) => dispatch(updateUserBook(book))
 }))
 class ReadPage extends Component {
 
@@ -72,14 +74,16 @@ class ReadPage extends Component {
     const { mixToc: chaptersData } = await fetchBookChapters(params.id)
     chaptersData.id = chaptersData._id;
     this.setState({ chaptersData })
-    await this.loadChapter(0, chaptersData.chapters[0])
+    const index = Number(params.index) || 0
+    await this.loadChapter(index, chaptersData.chapters[index])
     Taro.hideLoading()
   }
 
   loadChapter = async (index: number, originChapter?: IChapterOrigin ) => {
     Taro.showLoading({ title: '正在加载...' })
     const { fetchBookChapterText } = this.props;
-    const chapter = (originChapter || this.state.chaptersData.chapters[index]) as IChapterItem;
+    const { chaptersData } = this.state;
+    const chapter = (originChapter || chaptersData.chapters[index]) as IChapterItem;
     const chapterData = await fetchBookChapterText(chapter.link)
     chapter.body = chapterData.chapter.body
     chapter.index = index
@@ -87,8 +91,12 @@ class ReadPage extends Component {
       Taro.pageScrollTo({ scrollTop: 0, duration: 0 })
       Taro.hideLoading()
     })
+    chaptersData.id && await this.props.updateUserBook({
+      id: chaptersData.id,
+      lastIndex: chapter.index,
+    })
   }
-
+  
   handleAddUserBook = async () => {
     const { params } = this.$router
     await this.props.addUserBook({
@@ -103,6 +111,9 @@ class ReadPage extends Component {
 
   render () {
     const { chaptersData, chapter, drawShow } = this.state;
+    const isLastChapter = chapter.index === chaptersData.chapters.length - 1;
+    const isFirstChapter = chapter.index === 0;
+
     return (
       <View className='read'>
         <Catelogue
@@ -126,7 +137,8 @@ class ReadPage extends Component {
             </View>
           </View>
         </View>
-        <Button onClick={() => this.loadChapter(chapter.index + 1)}>下一章</Button>
+        {!isFirstChapter && <Button onClick={() => this.loadChapter(chapter.index - 1)}>{'上一章'}</Button>}
+        <Button disabled={isLastChapter} onClick={() => this.loadChapter(chapter.index + 1)}>{isLastChapter ? '已是最后一章' : '下一章'}</Button>
       </View>
     )
   }
