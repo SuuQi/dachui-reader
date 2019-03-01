@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import './catelogue.scss'
 import { AtDrawer } from 'taro-ui'
-import classname from 'classname'
+import classnames from 'classnames'
 import { IChaptersData, IChapterOrigin } from '../../constants/book'
 import { View } from '@tarojs/components'
 
@@ -53,7 +53,7 @@ export default class Catelogue extends Component {
           {
             chaptersData && chaptersData.chapters.map((chapter, i) => 
               <View
-                className={classname('catelogue__item', activeIndex === i ? 'catelogue__item--active' : 'catelogue__item--normal')}
+                className={classnames('catelogue__item', activeIndex === i ? 'catelogue__item--active' : 'catelogue__item--normal')}
                 key={`catelogue-item-${i}`}
                 onClick={() => this.handleItemClick(i, chapter)}
               >
