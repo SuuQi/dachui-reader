@@ -90,9 +90,11 @@ class ReadPage extends Component {
   }
 
   handleAddUserBook = async () => {
+    const { params } = this.$router
     await this.props.addUserBook({
       ...this.state.chaptersData,
-      lastIndex: this.state.chapter.index
+      lastIndex: this.state.chapter.index,
+      title: params.title
     })
     Taro.showToast({
       title: '加入成功'

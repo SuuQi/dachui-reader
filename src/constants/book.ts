@@ -35,6 +35,7 @@ export interface IChaptersData extends IChaptersDataOrigin {
 }
 
 export interface IUserBookItem extends IChaptersDataOrigin {
+  title: string
   lastIndex: number
 }
 

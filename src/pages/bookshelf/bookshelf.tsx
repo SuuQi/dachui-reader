@@ -46,7 +46,7 @@ class Bookshelf extends Component {
 
   handleBookItemClick = (book: IUserBookItem) => {
     // Taro.navigateTo({ url: `/pages/read/read?id=${book.id}&title=${book.title}` })
-    Taro.navigateTo({ url: `/pages/read/read?id=${book.book}&title=${''}` })
+    Taro.navigateTo({ url: `/pages/read/read?id=${book.book}&title=${book.title}` })
   }
 
   render () {
@@ -59,7 +59,7 @@ class Bookshelf extends Component {
             books.slice(0, 20).map(book => 
               <AtListItem
                 key={`bookitem-${book.id}`}
-                // title={book.title}
+                title={book.title}
                 // note={book.shortIntro}
                 extraText='查看'
                 arrow='right'
