@@ -94,7 +94,6 @@ class Bookstore extends Component {
               />
             )
           }
-          
         </AtList>
       </View>
     )
