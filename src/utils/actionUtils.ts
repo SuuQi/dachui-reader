@@ -68,10 +68,6 @@ export function fetchAjax ({ url, method = 'GET', type, data = {}, showLoading =
           await login()
           return store.dispatch( fetchAjax({ url, method, type, data, showLoading }) as any )
         }
-        // if (e.response && e.response.status === 403) {
-        //     // 403弹出无权限
-        //     return false
-        // }
         // 全局的错误处理
         Taro.showToast({
           title: `错误: ${e.statusCode || e.message || e.errMsg}`,

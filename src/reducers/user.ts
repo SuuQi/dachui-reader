@@ -1,5 +1,5 @@
 import { createReducer, fetchHandle, defaultSuccessByKey } from '../utils';
-import { FETCH_LOGIN_INFO, IBookItem, FETCH_USER_BOOKS } from '../constants/user';
+import { FETCH_LOGIN_INFO, IBookItem, FETCH_USER_BOOKS, ADD_USER_BOOK } from '../constants/user';
 
 export default createReducer({
   isFetching: false,
@@ -11,6 +11,7 @@ export default createReducer({
     sessionId: action.data.session_key || ''
   })),
 
-  [FETCH_USER_BOOKS]: fetchHandle(defaultSuccessByKey('books'))
+  [FETCH_USER_BOOKS]: fetchHandle(defaultSuccessByKey('books')),
+  [ADD_USER_BOOK]: fetchHandle(defaultSuccessByKey('books')),
 
 })

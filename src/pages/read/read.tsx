@@ -8,6 +8,8 @@ import './read.scss'
 import { IChaptersData, IChapterItem, IChapterOrigin } from '../../constants/book';
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book';
 import Catelogue from '../../componts/catelogue/catelogue';
+import { IBookItem } from '../../constants/user';
+import { addUserBook } from '../../actions/user';
 
 type PageStateProps = {
 }
@@ -15,6 +17,7 @@ type PageStateProps = {
 type PageDispatchProps = {
   fetchBookChapters: (bookId: string) => any
   fetchBookChapterText: (link: string) => any
+  addUserBook: (book: IBookItem) => any
 }
 
 type PageOwnProps = {}
@@ -34,7 +37,8 @@ interface ReadPage {
 
 @connect(({ book }) => pick(book, []), (dispatch) => ({
   fetchBookChapters: (bookId: string) => dispatch(fetchBookChapters(bookId)),
-  fetchBookChapterText: (link: string) => dispatch(fetchBookChapterText(link))
+  fetchBookChapterText: (link: string) => dispatch(fetchBookChapterText(link)),
+  addUserBook: (book: IBookItem) => dispatch(addUserBook(book))
 }))
 class ReadPage extends Component {
 
@@ -85,6 +89,16 @@ class ReadPage extends Component {
     })
   }
 
+  handleAddUserBook = async () => {
+    await this.props.addUserBook({
+      id: this.state.chaptersData._id,
+      lastIndex: this.state.chapter.index
+    })
+    Taro.showToast({
+      title: '加入成功'
+    })
+  }
+
   render () {
     const { chaptersData, chapter, drawShow } = this.state;
     return (
@@ -97,6 +111,7 @@ class ReadPage extends Component {
           onClose={() => this.setState({ drawShow: false })}
         />
         <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
+        <Button onClick={this.handleAddUserBook}>加入书架</Button>
         <View className='at-article'>
           <View className='at-article__h2'>
             {chapter.title}
