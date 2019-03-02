@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View, Button, ScrollView } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import pick from 'lodash/pick'
 
@@ -88,7 +88,7 @@ class ReadPage extends Component {
     chapter.body = chapterData.chapter.body
     chapter.index = index
     this.setState({ chapter }, () => {
-      Taro.pageScrollTo({ scrollTop: 0, duration: 0 })
+      // Taro.pageScrollTo({ scrollTop: 0, duration: 0 })
       Taro.hideLoading()
     })
     chaptersData.id && await this.props.updateUserBook({
@@ -123,22 +123,29 @@ class ReadPage extends Component {
           onItemClick={this.loadChapter}
           onClose={() => this.setState({ drawShow: false })}
         />
-        <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
-        <Button onClick={this.handleAddUserBook}>加入书架</Button>
-        <View className='at-article'>
+        <ScrollView
+          className='read__scroll at-article'
+          scrollY
+        >
+          <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
+          <Button onClick={this.handleAddUserBook}>加入书架</Button>
+          {!isFirstChapter && <Button onClick={() => this.loadChapter(chapter.index - 1)}>{'上一章'}</Button>}
+          <Button disabled={isLastChapter} onClick={() => this.loadChapter(chapter.index + 1)}>{isLastChapter ? '已是最后一章' : '下一章'}</Button>
           <View className='at-article__h2'>
             {chapter.title}
           </View>
           <View className='at-article__content'>
             <View className='at-article__section'>
-              {chapter.body!.split('\n').map((p, i) => 
-                <View className='at-article__p' key={`article-${i}`}>{p}</View>
-              )}
+            {
+                <View className='at-article__section'>
+                  {chapter.body!.split('\n').map((p, i) => 
+                    <View className='at-article__p' key={`article-${i}`}>{p}</View>
+                  )}
+                </View>
+            }
             </View>
           </View>
-        </View>
-        {!isFirstChapter && <Button onClick={() => this.loadChapter(chapter.index - 1)}>{'上一章'}</Button>}
-        <Button disabled={isLastChapter} onClick={() => this.loadChapter(chapter.index + 1)}>{isLastChapter ? '已是最后一章' : '下一章'}</Button>
+        </ScrollView>
       </View>
     )
   }

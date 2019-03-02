@@ -3,7 +3,7 @@ import './catelogue.scss'
 import { AtDrawer } from 'taro-ui'
 import classnames from 'classnames'
 import { IChaptersData, IChapterOrigin } from '../../constants/book'
-import { View } from '@tarojs/components'
+import { View, ScrollView } from '@tarojs/components'
 
 type DefaultProps = {
   onItemClick?: (i: number, chapter: IChapterOrigin) => void
@@ -38,7 +38,7 @@ export default class Catelogue extends Component {
     if (i === this.props.activeIndex) return
     this.props.onItemClick!(i, chapter)
     this.props.onClose!()
-  } 
+  }
 
   render () {
     const { chaptersData, show, activeIndex } = this.props
@@ -50,6 +50,10 @@ export default class Catelogue extends Component {
           onClose={this.props.onClose}
           width='80%'
         >
+          <ScrollView
+            className='catelogue__scroll'
+            scrollY
+          >
           {
             chaptersData && chaptersData.chapters.map((chapter, i) => 
               <View
@@ -61,6 +65,7 @@ export default class Catelogue extends Component {
               </View>
             )
           }
+          </ScrollView>
         </AtDrawer>
     )
   }

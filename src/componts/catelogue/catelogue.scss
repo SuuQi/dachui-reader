@@ -4,7 +4,7 @@
 
 .catelogue {
   background-color: $color-bg;
-  
+  height: 100%;
   &__item {
     padding: $spacing-v-lg $spacing-h-lg;
     position: relative;
@@ -18,5 +18,8 @@
     &--active {
       color: $color-error;
     }
+  }
+  &__scroll {
+    height: 100%;
   }
 }
