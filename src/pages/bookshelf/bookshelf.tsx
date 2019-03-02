@@ -1,13 +1,12 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
 import { fetchUserBook } from '../../actions/user';
 import { IUserBookItem } from '../../constants/book';
 import { AtList, AtListItem } from 'taro-ui';
-import { SERVER_STATICS_ROOT } from '../../constants';
 
 type PageStateProps = {
   books: IUserBookItem[]
@@ -52,7 +51,6 @@ class Bookshelf extends Component {
     const { books } = this.props
     return (
       <View className='bookshelf'>
-        <View>Hello, 书架</View>
         <AtList>
           {
             books.slice(0, 20).map(book => 
