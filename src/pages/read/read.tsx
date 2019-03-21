@@ -5,10 +5,10 @@ import { connect } from '@tarojs/redux'
 import pick from 'lodash/pick'
 
 import './read.scss'
-import { IChaptersData, IChapterItem, IChapterOrigin, IUserBookItem } from '../../constants/book';
-import { fetchBookChapters, fetchBookChapterText } from '../../actions/book';
-import Catelogue from '../../componts/catelogue/catelogue';
-import { addUserBook, updateUserBook } from '../../actions/user';
+import { IChaptersData, IChapterItem, IChapterOrigin, IUserBookItem } from '../../constants/book'
+import { fetchBookChapters, fetchBookChapterText } from '../../actions/book'
+import Catelogue from '../../componts/catelogue/catelogue'
+import { addUserBook, updateUserBook } from '../../actions/user'
 
 type PageStateProps = {
 }
@@ -67,12 +67,12 @@ class ReadPage extends Component {
   async componentWillMount () {
     Taro.showLoading({ title: '正在加载...' })
     const { params } = this.$router
-    const { fetchBookChapters } = this.props;
+    const { fetchBookChapters } = this.props
     Taro.setNavigationBarTitle({
       title: params.title
     })
     const { mixToc: chaptersData } = await fetchBookChapters(params.id)
-    chaptersData.id = chaptersData._id;
+    chaptersData.id = chaptersData._id
     this.setState({ chaptersData })
     const index = Number(params.index) || 0
     await this.loadChapter(index, chaptersData.chapters[index])
@@ -81,9 +81,9 @@ class ReadPage extends Component {
 
   loadChapter = async (index: number, originChapter?: IChapterOrigin ) => {
     Taro.showLoading({ title: '正在加载...' })
-    const { fetchBookChapterText } = this.props;
-    const { chaptersData } = this.state;
-    const chapter = (originChapter || chaptersData.chapters[index]) as IChapterItem;
+    const { fetchBookChapterText } = this.props
+    const { chaptersData } = this.state
+    const chapter = (originChapter || chaptersData.chapters[index]) as IChapterItem
     const chapterData = await fetchBookChapterText(chapter.link)
     chapter.body = chapterData.chapter.body
     chapter.index = index
@@ -110,10 +110,9 @@ class ReadPage extends Component {
   }
 
   render () {
-    const { chaptersData, chapter, drawShow } = this.state;
-    const isLastChapter = chapter.index === chaptersData.chapters.length - 1;
-    const isFirstChapter = chapter.index === 0;
-
+    const { chaptersData, chapter, drawShow } = this.state
+    const isLastChapter = chapter.index === chaptersData.chapters.length - 1
+    const isFirstChapter = chapter.index === 0
     return (
       <View className='read'>
         <Catelogue
