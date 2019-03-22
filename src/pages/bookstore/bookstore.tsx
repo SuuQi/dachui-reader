@@ -5,9 +5,9 @@ import { connect } from '@tarojs/redux'
 import { AtSearchBar, AtList, AtListItem } from 'taro-ui'
 
 import './bookstore.scss'
-import { fuzzySearch, clearFuzzySearch } from '../../actions/book';
-import { SERVER_STATICS_ROOT } from '../../constants';
-import { IBookItem } from '../../constants/book';
+import { fuzzySearch, clearFuzzySearch } from '../../actions/book'
+import { SERVER_STATICS_ROOT } from '../../constants'
+import { IBookItem } from '../../constants/book'
 
 type PageStateProps = {
   searchList: IBookItem[]

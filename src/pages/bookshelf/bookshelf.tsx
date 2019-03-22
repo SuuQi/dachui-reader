@@ -4,9 +4,9 @@ import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
 import './bookshelf.scss'
-import { fetchUserBook } from '../../actions/user';
-import { IUserBookItem } from '../../constants/book';
-import { AtList, AtListItem } from 'taro-ui';
+import { fetchUserBook } from '../../actions/user'
+import { IUserBookItem } from '../../constants/book'
+import { AtList, AtListItem } from 'taro-ui'
 
 type PageStateProps = {
   books: IUserBookItem[]

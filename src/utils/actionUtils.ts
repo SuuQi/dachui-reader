@@ -5,9 +5,9 @@
 import Taro from '@tarojs/taro'
 
 import { FETCH_REQUESTED, FETCH_SUCCEEDED, FETCH_FAILED, HTTP_METHOD } from '../constants'
-import { login } from './';
-import { SESSION_KEY } from '../constants/user';
-import store from '../store';
+import { login } from './'
+import { SESSION_KEY } from '../constants/user'
+import store from '../store'
 
 /**
  * 异步ajax请求的action生成参数

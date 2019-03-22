@@ -1,5 +1,5 @@
-import { createReducer, fetchHandle } from '../utils';
-import { FETCH_FUZZY_SEARCH, CLEAR_FUZZY_SEARCH, IBookItem } from '../constants/book';
+import { createReducer, fetchHandle } from '../utils'
+import { FETCH_FUZZY_SEARCH, CLEAR_FUZZY_SEARCH, IBookItem } from '../constants/book'
 
 export default createReducer({
   isFetching: false,

@@ -1,6 +1,6 @@
-import { createReducer, fetchHandle, defaultSuccessByKey } from '../utils';
-import { FETCH_LOGIN_INFO, FETCH_USER_BOOKS, ADD_USER_BOOK, UPDATE_USER_BOOK } from '../constants/user';
-import { IUserBookItem } from '../constants/book';
+import { createReducer, fetchHandle, defaultSuccessByKey } from '../utils'
+import { FETCH_LOGIN_INFO, FETCH_USER_BOOKS, ADD_USER_BOOK, UPDATE_USER_BOOK } from '../constants/user'
+import { IUserBookItem } from '../constants/book'
 
 export default createReducer({
   isFetching: false,
