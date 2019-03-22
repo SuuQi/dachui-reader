@@ -123,26 +123,22 @@ class ReadPage extends Component {
           onClose={() => this.setState({ drawShow: false })}
         />
         <ScrollView
-          className='read__scroll at-article'
+          className='read__scroll'
           scrollY
         >
           <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
           <Button onClick={this.handleAddUserBook}>加入书架</Button>
           {!isFirstChapter && <Button onClick={() => this.loadChapter(chapter.index - 1)}>{'上一章'}</Button>}
           <Button disabled={isLastChapter} onClick={() => this.loadChapter(chapter.index + 1)}>{isLastChapter ? '已是最后一章' : '下一章'}</Button>
-          <View className='at-article__h2'>
-            {chapter.title}
-          </View>
-          <View className='at-article__content'>
-            <View className='at-article__section'>
-            {
-                <View className='at-article__section'>
-                  {chapter.body!.split('\n').map((p, i) => 
-                    <View className='at-article__p' key={`article-${i}`}>{p}</View>
-                  )}
-                </View>
-            }
+          <View className='article'>
+            <View className='article__title'>
+              {chapter.title}
             </View>
+            {
+              chapter.body!.split('\n').map((p, i) => 
+                <View className='article__p' key={`article-${i}`}>{p}</View>
+              )
+            }
           </View>
         </ScrollView>
       </View>

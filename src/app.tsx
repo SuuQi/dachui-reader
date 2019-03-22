@@ -36,10 +36,11 @@ class App extends Component {
       'pages/read/read'
     ],
     tabBar: {
+      position: 'top',
       list: [
         {
           pagePath: 'pages/bookshelf/bookshelf',
-          text: '书架'
+          text: '追书'
         },
         {
           pagePath: 'pages/bookstore/bookstore',
@@ -47,7 +48,7 @@ class App extends Component {
         },
         {
           pagePath: 'pages/index/index',
-          text: '首页'
+          text: '关于'
         }
       ]
     },
