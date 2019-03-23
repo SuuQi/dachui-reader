@@ -9,6 +9,7 @@ import { IChaptersData, IChapterItem, IChapterOrigin, IUserBookItem } from '../.
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book'
 import Catelogue from '../../componts/catelogue/catelogue'
 import { addUserBook, updateUserBook } from '../../actions/user'
+import Article from '../../componts/Article/article';
 
 type PageStateProps = {
 }
@@ -122,6 +123,7 @@ class ReadPage extends Component {
           onItemClick={this.loadChapter}
           onClose={() => this.setState({ drawShow: false })}
         />
+        <Article title={chapter.title} content={chapter.body} />
         <ScrollView
           className='read__scroll'
           scrollY
@@ -130,16 +132,6 @@ class ReadPage extends Component {
           <Button onClick={this.handleAddUserBook}>加入书架</Button>
           {!isFirstChapter && <Button onClick={() => this.loadChapter(chapter.index - 1)}>{'上一章'}</Button>}
           <Button disabled={isLastChapter} onClick={() => this.loadChapter(chapter.index + 1)}>{isLastChapter ? '已是最后一章' : '下一章'}</Button>
-          <View className='article'>
-            <View className='article__title'>
-              {chapter.title}
-            </View>
-            {
-              chapter.body!.split('\n').map((p, i) => 
-                <View className='article__p' key={`article-${i}`}>{p}</View>
-              )
-            }
-          </View>
         </ScrollView>
       </View>
     )
