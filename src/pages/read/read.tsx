@@ -122,7 +122,7 @@ class ReadPage extends Component<IProps, PageState> {
           onItemClick={this.loadChapter}
           onClose={() => this.setState({ drawShow: false })}
         />
-        <Article title={chapter.title} content={chapter.body} windowWidth={windowWidth} />
+        <Article title={chapter.title} content={chapter.body} />
         {/* <ScrollView
           className='read__scroll'
           scrollY
