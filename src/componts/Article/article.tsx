@@ -54,7 +54,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     title: '',
     content: '',
     minOffset: 50,
-    centerButtonWidth: 250,
+    centerButtonWidth: 200,
     backTransition: .2,
     onCenterButtonClick: noop,
     onScrollPrev: noop,

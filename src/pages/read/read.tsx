@@ -136,7 +136,7 @@ class ReadPage extends Component<IProps, PageState> {
           title={chapter.title}
           content={chapter.body}
           page={page}
-          onCenterButtonClick={() => this.setState({ drawShow: true })}
+          onCenterButtonClick={() => {this.setState({ drawShow: true, page: 0 })}}
           onSwiper={(page: number) => this.setState({ page })}
           onScrollPrev={() => this.loadChapter(chapter.index - 1)}
           onScrollNext={this.handleChapterNext}
