@@ -21,8 +21,10 @@ type ComponentState = {
 
 export default class Article extends Component<ComponentProps, ComponentState> {
 
-  warpWidth: number
+  wrapWidth: number
   wrapHeight: number
+  contentWidth: number
+  contentHeight: number
   touchDetail: {
     scrollLeft: number
     x: number
@@ -42,17 +44,32 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     backTransition: .3
   }
 
-  componentDidShow () {
-    // 设置宽高值
+  /** 设置宽高值、预设值 */ 
+  private __resize__ () {
     Taro.createSelectorQuery()
       .in(process.env.TARO_ENV === 'h5' ? this : this.$scope)
       .select('.article')
       .boundingClientRect(rect => {
         rect = Array.isArray(rect) ? rect[0] : rect
-        this.warpWidth = rect.width
+        this.wrapWidth = rect.width
         this.wrapHeight = rect.height
       })
       .exec()
+    
+    Taro.createSelectorQuery()
+    .in(process.env.TARO_ENV === 'h5' ? this : this.$scope)
+    .select('.article-content')
+    .boundingClientRect(rect => {
+      rect = Array.isArray(rect) ? rect[0] : rect
+      this.contentWidth = rect.width
+      this.contentHeight = rect.height
+      console.log(rect)
+    })
+    .exec()
+  }
+
+  componentDidShow () {
+    this.__resize__()
   }
 
   onSwiperStart = () => {
@@ -90,15 +107,15 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     const { x: startX, scrollLeft: startScrollLeft } = this.touchDetail
     const { minOffset, backTransition } = this.props
     const offsetX = this.moveTouch.clientX - startX
-    let scrollCount = offsetX > 0 ? Math.floor(offsetX / this.warpWidth) : Math.ceil(offsetX / this.warpWidth)
-    const remianOffset = offsetX % this.warpWidth
+    let scrollCount = offsetX > 0 ? Math.floor(offsetX / this.wrapWidth) : Math.ceil(offsetX / this.wrapWidth)
+    const remianOffset = offsetX % this.wrapWidth
     if (remianOffset > minOffset) {
       scrollCount++
     } else if (remianOffset < -minOffset) {
       scrollCount--
     }
     this.setState({
-      scrollLeft: startScrollLeft + scrollCount * this.warpWidth,
+      scrollLeft: startScrollLeft + scrollCount * this.wrapWidth,
       transition: backTransition
     })
   }
@@ -108,10 +125,10 @@ export default class Article extends Component<ComponentProps, ComponentState> {
 
   onClickHandle = async (e: ITouchEvent) => {
     let scrollLeft = this.state.scrollLeft
-    if (e.detail.x > this.warpWidth / 2) {
-      scrollLeft -= this.warpWidth
+    if (e.detail.x > this.wrapWidth / 2) {
+      scrollLeft -= this.wrapWidth
     } else {
-      scrollLeft += this.warpWidth
+      scrollLeft += this.wrapWidth
     }
     this.setState({ scrollLeft })
   }
@@ -129,7 +146,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
         onTouchCancel={this.onTouchCancel}
         onClick={this.onClickHandle}
       >
-        <View className="article__content"
+        <View className="article-content article__content"
           style={{
             transform: `translate3d(${scrollLeft}px, 0, 0)`,
             transition: `transform ${transition}s`
