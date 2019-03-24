@@ -4,7 +4,7 @@
   height: 100%;
   padding: 20px 0 15px;
   box-sizing: border-box;
-  &::-webkit-scrollbar {display:none}
+  overflow: hidden;
 
   &__content {
     height: 100%;
@@ -13,7 +13,7 @@
     line-height: 1.8;
   
     // 为文章分页分栏
-    columns: 750px;
+    columns: 750px auto;
     column-gap: 0;
   }
 
