@@ -21,12 +21,7 @@ type ComponentState = {
   scrollIntoView?: string
 }
 
-export default interface Catelogue {
-  props: ComponentProps
-  state: ComponentState
-}
-
-export default class Catelogue extends Component {
+export default class Catelogue extends Component<ComponentProps, ComponentState> {
 
   static defaultProps: DefaultProps = {
     onItemClick: () => {},

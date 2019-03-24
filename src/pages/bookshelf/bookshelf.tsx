@@ -23,17 +23,12 @@ type PageState = {
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Bookshelf {
-  props: IProps
-  state: PageState
-}
-
 @connect(({ user }) => ({
   books: user.books
 }), (dispatch) => ({
   fetchUserBook: () => dispatch(fetchUserBook())
 }))
-class Bookshelf extends Component {
+class Bookshelf extends Component<IProps, PageState> {
 
   config: Config = {
     navigationBarTitleText: '书架'

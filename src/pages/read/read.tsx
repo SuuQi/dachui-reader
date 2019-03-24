@@ -12,6 +12,7 @@ import { addUserBook, updateUserBook } from '../../actions/user'
 import Article from '../../componts/Article/article';
 
 type PageStateProps = {
+  windowWidth: number
 }
 
 type PageDispatchProps = {
@@ -31,18 +32,15 @@ type PageState = {
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface ReadPage {
-  props: IProps
-  state: PageState
-}
-
-@connect(({ book }) => pick(book, []), (dispatch) => ({
+@connect(({ book, base }) => ({
+  windowWidth: base.systemInfo.windowWidth
+}), (dispatch) => ({
   fetchBookChapters: (bookId: string) => dispatch(fetchBookChapters(bookId)),
   fetchBookChapterText: (link: string) => dispatch(fetchBookChapterText(link)),
   addUserBook: (book: IUserBookItem) => dispatch(addUserBook(book)),
   updateUserBook: (book: Partial<IUserBookItem>) => dispatch(updateUserBook(book))
 }))
-class ReadPage extends Component {
+class ReadPage extends Component<IProps, PageState> {
 
   state: PageState = {
     chaptersData: {
@@ -111,6 +109,7 @@ class ReadPage extends Component {
   }
 
   render () {
+    const { windowWidth } = this.props
     const { chaptersData, chapter, drawShow } = this.state
     const isLastChapter = chapter.index === chaptersData.chapters.length - 1
     const isFirstChapter = chapter.index === 0
@@ -123,8 +122,8 @@ class ReadPage extends Component {
           onItemClick={this.loadChapter}
           onClose={() => this.setState({ drawShow: false })}
         />
-        <Article title={chapter.title} content={chapter.body} />
-        <ScrollView
+        <Article title={chapter.title} content={chapter.body} windowWidth={windowWidth} />
+        {/* <ScrollView
           className='read__scroll'
           scrollY
         >
@@ -132,7 +131,7 @@ class ReadPage extends Component {
           <Button onClick={this.handleAddUserBook}>加入书架</Button>
           {!isFirstChapter && <Button onClick={() => this.loadChapter(chapter.index - 1)}>{'上一章'}</Button>}
           <Button disabled={isLastChapter} onClick={() => this.loadChapter(chapter.index + 1)}>{isLastChapter ? '已是最后一章' : '下一章'}</Button>
-        </ScrollView>
+        </ScrollView> */}
       </View>
     )
   }

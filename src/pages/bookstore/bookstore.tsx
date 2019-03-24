@@ -27,18 +27,13 @@ type PageState = {
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Bookstore {
-  props: IProps
-  state: PageState
-}
-
 @connect(({ book }) => ({
   ...book
 }), (dispatch) => ({
   fuzzySearch: (query: string) => dispatch(fuzzySearch(query)),
   clearFuzzySearch: () => dispatch(clearFuzzySearch())
 }))
-class Bookstore extends Component {
+class Bookstore extends Component<IProps, PageState> {
   state = {
     searchString: ''
   }

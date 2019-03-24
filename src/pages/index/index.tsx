@@ -11,22 +11,19 @@ type PageStateProps = {
 type PageDispatchProps = {
 }
 
-type PageOwnProps = {}
+type PageOwnProps = {
+  
+}
 
 type PageState = {
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Index {
-  props: IProps
-  state: PageState
-}
-
 @connect(() => ({
-}), (dispatch) => ({
+}), () => ({
 }))
-class Index extends Component {
+class Index extends Component<IProps, PageState> {
 
   config: Config = {
     navigationBarTitleText: '首页'

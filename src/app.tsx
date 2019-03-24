@@ -6,6 +6,7 @@ import Index from './pages/index'
 
 import store from './store'
 import './app.scss'
+import { getSystemInfo } from './actions/base';
 
 /** fix window 变量报错 */
 declare global {
@@ -80,5 +81,7 @@ class App extends Component {
     )
   }
 }
+
+getSystemInfo().then(store.dispatch)
 
 Taro.render(<App />, document.getElementById('app'))

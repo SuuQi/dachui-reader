@@ -21,5 +21,4 @@ export default createReducer({
     searchList: [],
     searchListCount: 0
   })
-
 })
