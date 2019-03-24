@@ -12,7 +12,6 @@ import { addUserBook, updateUserBook } from '../../actions/user'
 import Article from '../../componts/Article/article';
 
 type PageStateProps = {
-  windowWidth: number
 }
 
 type PageDispatchProps = {
@@ -28,12 +27,14 @@ type PageState = {
   chaptersData: IChaptersData
   chapter: IChapterItem
   drawShow: boolean
+
+  /** 当前页 */
+  page: number
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-@connect(({ book, base }) => ({
-  windowWidth: base.systemInfo.windowWidth
+@connect(({ book }) => ({
 }), (dispatch) => ({
   fetchBookChapters: (bookId: string) => dispatch(fetchBookChapters(bookId)),
   fetchBookChapterText: (link: string) => dispatch(fetchBookChapterText(link)),
@@ -43,6 +44,7 @@ type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 class ReadPage extends Component<IProps, PageState> {
 
   state: PageState = {
+    page: 0,
     chaptersData: {
       id: '',
       book: '',
@@ -63,6 +65,7 @@ class ReadPage extends Component<IProps, PageState> {
     navigationBarTitleText: '大锤阅读器'
   }
 
+  /** 初始化操作 */
   async componentWillMount () {
     Taro.showLoading({ title: '正在加载...' })
     const { params } = this.$router
@@ -78,7 +81,8 @@ class ReadPage extends Component<IProps, PageState> {
     Taro.hideLoading()
   }
 
-  loadChapter = async (index: number, originChapter?: IChapterOrigin ) => {
+  /** 加载章节 */
+  loadChapter = async (index: number, originChapter?: IChapterOrigin) => {
     Taro.showLoading({ title: '正在加载...' })
     const { fetchBookChapterText } = this.props
     const { chaptersData } = this.state
@@ -96,6 +100,7 @@ class ReadPage extends Component<IProps, PageState> {
     })
   }
   
+  /** 加入书架 */
   handleAddUserBook = async () => {
     const { params } = this.$router
     await this.props.addUserBook({
@@ -108,9 +113,14 @@ class ReadPage extends Component<IProps, PageState> {
     })
   }
 
+  handleChapterNext = async () => {
+    const { chapter } = this.state
+    await this.loadChapter(chapter.index + 1)
+    this.setState({ page: 0 })
+  }
+
   render () {
-    const { windowWidth } = this.props
-    const { chaptersData, chapter, drawShow } = this.state
+    const { chaptersData, chapter, drawShow, page } = this.state
     const isLastChapter = chapter.index === chaptersData.chapters.length - 1
     const isFirstChapter = chapter.index === 0
     return (
@@ -125,8 +135,11 @@ class ReadPage extends Component<IProps, PageState> {
         <Article
           title={chapter.title}
           content={chapter.body}
-          onScrollPrev={() => console.log('上一章')}
-          onScrollNext={() => console.log('下一章')}
+          page={page}
+          onCenterButtonClick={() => this.setState({ drawShow: true })}
+          onSwiper={(page: number) => this.setState({ page })}
+          onScrollPrev={() => this.loadChapter(chapter.index - 1)}
+          onScrollNext={this.handleChapterNext}
         />
         {/* <ScrollView
           className='read__scroll'
