@@ -58,7 +58,7 @@ export default class Catelogue extends Component<ComponentProps, ComponentState>
           show={show}
           mask
           onClose={this.props.onClose}
-          width='80%'
+          width='75%'
         >
           <ScrollView
             className='catelogue__scroll'

@@ -9,7 +9,7 @@ import { IChaptersData, IChapterItem, IChapterOrigin, IUserBookItem } from '../.
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book'
 import Catelogue from '../../componts/catelogue/catelogue'
 import { addUserBook, updateUserBook } from '../../actions/user'
-import Article from '../../componts/Article/article';
+import Article from '../../componts/article/article';
 
 type PageStateProps = {
 }
@@ -129,14 +129,17 @@ class ReadPage extends Component<IProps, PageState> {
           show={drawShow}
           activeIndex={chapter.index}
           chaptersData={chaptersData}
-          onItemClick={this.loadChapter}
+          onItemClick={(index: number) => {
+            this.loadChapter(index)
+            this.setState({ page: 0 })
+          }}
           onClose={() => this.setState({ drawShow: false })}
         />
         <Article
           title={chapter.title}
           content={chapter.body}
           page={page}
-          onCenterButtonClick={() => {this.setState({ drawShow: true, page: 0 })}}
+          onCenterButtonClick={() => {this.setState({ drawShow: true })}}
           onSwiper={(page: number) => this.setState({ page })}
           onScrollPrev={() => this.loadChapter(chapter.index - 1)}
           onScrollNext={this.handleChapterNext}
