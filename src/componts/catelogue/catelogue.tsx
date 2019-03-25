@@ -2,12 +2,13 @@ import Taro, { Component } from '@tarojs/taro'
 import './catelogue.scss'
 import { AtDrawer } from 'taro-ui'
 import classnames from 'classnames'
+import noop from 'lodash/noop'
 import { IChaptersData, IChapterOrigin } from '../../constants/book'
 import { View, ScrollView } from '@tarojs/components'
 
 type DefaultProps = {
-  onItemClick?: (i: number, chapter: IChapterOrigin) => void
-  onClose?: () => void
+  onItemClick: (i: number, chapter: IChapterOrigin) => void
+  onClose: () => void
 }
 
 interface ComponentProps extends DefaultProps {
@@ -24,8 +25,8 @@ type ComponentState = {
 export default class Catelogue extends Component<ComponentProps, ComponentState> {
 
   static defaultProps: DefaultProps = {
-    onItemClick: () => {},
-    onClose: () => {}
+    onItemClick: noop,
+    onClose: noop
   }
 
   componentWillReceiveProps (nextProps: ComponentProps) {
