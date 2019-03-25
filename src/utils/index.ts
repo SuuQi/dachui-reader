@@ -26,3 +26,8 @@ export function getBoundingClientRect (selector: string, root?: any): Promise<cl
   })
 }
 
+export function sleep (time: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, time)
+  })
+}

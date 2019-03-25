@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import { ITouchEvent, ITouch } from '@tarojs/components/types/common';
 import memoize from 'lodash/memoize'
 import noop from 'lodash/noop'
-import { getBoundingClientRect } from '../../utils';
+import { getBoundingClientRect, sleep } from '../../utils';
 
 type DefaultProps = {
   title: string
@@ -14,13 +14,13 @@ type DefaultProps = {
   backTransition: number
   /** 中间按钮大小 */
   centerButtonWidth: number
+  page: number
   onCenterButtonClick: () => void
   onScrollPrev: () => void
   onScrollNext: () => void
 }
 
 interface ComponentProps extends DefaultProps {
-  page: number
   onSwiper: (page: number) => void
 }
 
@@ -29,23 +29,28 @@ type ComponentState = {
   transition: number
   /** 总共的页数 */
   pageCount: number
+  /** 当前页 */
+  currentPage: number
 }
 
 export default class Article extends Component<ComponentProps, ComponentState> {
 
-  wrapWidth: number
-  wrapHeight: number
-  touchDetail: {
+  /** 正在动画中 */
+  private animating: boolean = false
+  private moveTouch?: ITouch
+
+  private wrapWidth: number
+  private wrapHeight: number
+  private touchDetail: {
     x: number
     y: number
   }
-  moveTouch?: ITouch
 
   state = {
     scrollLeft: 0,
     transition: 0,
     pageCount: 1,
-    isResized: false
+    currentPage: 0
   }
 
   static defaultProps: DefaultProps = {
@@ -56,7 +61,14 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     backTransition: .2,
     onCenterButtonClick: noop,
     onScrollPrev: noop,
-    onScrollNext: noop
+    onScrollNext: noop,
+    page: 0
+  }
+
+  componentWillReceiveProps (nextProps: ComponentProps) {
+    if (nextProps.page !== this.props.page && nextProps.page !== this.state.currentPage) {
+      this.setState({ currentPage: nextProps.page })
+    }
   }
 
   /** 设置宽高值、预设值 */
@@ -92,6 +104,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
 
   /** 触摸滑动开始，记录初始值和初始化 */
   onTouchStart = (e: ITouchEvent) => {
+    if (this.animating) return
     const touch = e.touches[0]
     this.moveTouch = undefined
     this.touchDetail = {
@@ -106,6 +119,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
 
   /** 触摸滑动过程中，滑动及记录 */
   onTouchMove = (e: ITouchEvent) => {
+    if (this.animating) return
     const touch = e.touches[0]
     const { x: startX } = this.touchDetail
     const offsetX = touch.clientX - startX
@@ -120,21 +134,33 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     if (!this.moveTouch) return
     const { x: startX } = this.touchDetail
     let { minOffset, backTransition, page } = this.props
+    let { currentPage } = this.state
     const offsetX = this.moveTouch.clientX - startX
     if (offsetX > minOffset) {
-      page--
+      currentPage--
     } else if (offsetX < -minOffset) {
-      page++
+      currentPage++
     }
+
+    this.moveTouch = undefined
+    this.animating = true
+    const transition = this.swiperChange(currentPage) ? backTransition : 0
     this.setState({
       scrollLeft: 0,
-      transition: this.swiperChange(page) ? backTransition : 0
+      currentPage,
+      transition,
+    }, async () => {
+      /** 等待动画结束 */
+      await sleep(transition * 1000 + 50)
+      this.animating = false
     })
   }
 
   /** 点击时间，前一页，后一页，点击中央 */
   onClickHandle = async (e: ITouchEvent) => {
-    let { page, centerButtonWidth, onCenterButtonClick } = this.props
+    if (this.animating) return
+    let { centerButtonWidth, onCenterButtonClick } = this.props
+    let { currentPage } = this.state
     const offsetMiddleX = e.detail.x - this.wrapWidth / 2
     const offsetMiddleY = e.detail.y - this.wrapHeight / 2
     if (Math.abs(offsetMiddleX) < centerButtonWidth / 2 && offsetMiddleY < centerButtonWidth / 2) {
@@ -142,16 +168,16 @@ export default class Article extends Component<ComponentProps, ComponentState> {
       return onCenterButtonClick()
     }
     if (offsetMiddleX > 0) {
-      page++
+      currentPage++
     } else {
-      page--
+      currentPage--
     }
-    this.swiperChange(page)
+    this.swiperChange(currentPage)
   }
 
   /** 改变page, 返回是否成功 */
   swiperChange (page: number): boolean {
-    const { onScrollPrev, onScrollNext } = this.props
+    const { onSwiper, onScrollPrev, onScrollNext } = this.props
     const { pageCount } = this.state
     if (page < 0) {
       onScrollPrev()
@@ -162,7 +188,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
       // this.props.onSwiper(pageCount - 1)
       return false
     } else {
-      this.props.onSwiper(page)
+      onSwiper(page)
       return true
     }
   }
@@ -171,13 +197,13 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   getContentArray = memoize((content: string) => content.split('\n'))
 
   render () {
-    const { title, content, page } = this.props
-    const { scrollLeft, transition, pageCount } = this.state
+    const { title, content } = this.props
+    const { scrollLeft, transition, pageCount, currentPage } = this.state
     const contentArray = this.getContentArray(content)
     const contentArrayLength = contentArray.length
 
     // 校验props
-    const activePage = Math.max(0, Math.min(page, pageCount))
+    const activePage = Math.max(0, Math.min(currentPage, pageCount))
 
     return (
       <View
