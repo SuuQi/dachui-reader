@@ -56,7 +56,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   static defaultProps: DefaultProps = {
     title: '',
     content: '',
-    minOffset: 50,
+    minOffset: 30,
     centerButtonWidth: 200,
     backTransition: .2,
     onCenterButtonClick: noop,
