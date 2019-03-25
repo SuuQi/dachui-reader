@@ -25,7 +25,7 @@ interface ComponentProps extends DefaultProps {
 }
 
 type ComponentState = {
-  scrollLeft: number
+  translateX: number
   transition: number
   /** 总共的页数 */
   pageCount: number
@@ -47,7 +47,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   }
 
   state = {
-    scrollLeft: 0,
+    translateX: 0,
     transition: 0,
     pageCount: 1,
     currentPage: 0
@@ -112,7 +112,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
       y: touch.clientY
     }
     this.setState({
-      scrollLeft: 0,
+      translateX: 0,
       transition: 0
     })
   }
@@ -125,7 +125,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     const offsetX = touch.clientX - startX
     this.moveTouch = touch
     this.setState({
-      scrollLeft: offsetX
+      translateX: offsetX
     })
   }
 
@@ -146,7 +146,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     this.animating = true
     const transition = this.swiperChange(currentPage) ? backTransition : 0
     this.setState({
-      scrollLeft: 0,
+      translateX: 0,
       currentPage,
       transition,
     }, async () => {
@@ -198,7 +198,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
 
   render () {
     const { title, content } = this.props
-    const { scrollLeft, transition, pageCount, currentPage } = this.state
+    const { translateX, transition, pageCount, currentPage } = this.state
     const contentArray = this.getContentArray(content)
     const contentArrayLength = contentArray.length
 
@@ -215,7 +215,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
       >
         <View className="article__content article-content"
           style={{
-            transform: `translate3d(${activePage * this.wrapWidth * -1 + scrollLeft}px, 0, 0)`,
+            transform: `translate3d(${activePage * this.wrapWidth * -1 + translateX}px, 0, 0)`,
             transition: `transform ${transition}s`
           }}
         >
