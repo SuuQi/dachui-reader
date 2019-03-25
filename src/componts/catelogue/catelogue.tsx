@@ -53,32 +53,32 @@ export default class Catelogue extends Component<ComponentProps, ComponentState>
     const { chaptersData, show, activeIndex, onClose } = this.props
     const { scrollIntoView, showDate } = this.state
     return (
-        <AtDrawer
-          className='catelogue'
-          show={show}
-          mask
-          onClose={onClose}
-          width='75%'
+      <AtDrawer
+        className='catelogue'
+        show={show}
+        mask
+        onClose={onClose}
+        width='75%'
+      >
+        <ScrollView
+          className='catelogue__scroll'
+          scrollIntoView={scrollIntoView}
+          scrollY
         >
-          <ScrollView
-            className='catelogue__scroll'
-            scrollIntoView={scrollIntoView}
-            scrollY
-          >
-          {
-            chaptersData && chaptersData.chapters.map((chapter, i) => 
-              <View
-                className={classnames('catelogue__item', activeIndex === i ? 'catelogue__item--active' : 'catelogue__item--normal')}
-                key={`catelogue-item-${i}`}
-                id={`catelogue-item-${showDate}-${i}`}
-                onClick={() => this.handleItemClick(i, chapter)}
-              >
-                {chapter.title}
-              </View>
-            )
-          }
-          </ScrollView>
-        </AtDrawer>
+        {
+          chaptersData && chaptersData.chapters.map((chapter, i) => 
+            <View
+              className={classnames('catelogue__item', activeIndex === i ? 'catelogue__item--active' : 'catelogue__item--normal')}
+              key={`catelogue-item-${i}`}
+              id={`catelogue-item-${showDate}-${i}`}
+              onClick={() => this.handleItemClick(i, chapter)}
+            >
+              {chapter.title}
+            </View>
+          )
+        }
+        </ScrollView>
+      </AtDrawer>
     )
   }
 }

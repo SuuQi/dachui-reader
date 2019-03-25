@@ -9,7 +9,8 @@ import { IChaptersData, IChapterItem, IChapterOrigin, IUserBookItem } from '../.
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book'
 import Catelogue from '../../componts/catelogue/catelogue'
 import { addUserBook, updateUserBook } from '../../actions/user'
-import Article from '../../componts/article/article';
+import Article from '../../componts/article/article'
+import SettingsBar from './settingsBar'
 
 type PageStateProps = {
 }
@@ -26,7 +27,7 @@ type PageOwnProps = {}
 type PageState = {
   chaptersData: IChaptersData
   chapter: IChapterItem
-  drawShow: boolean
+  catelogueShow: boolean
 
   /** 当前页 */
   page: number
@@ -58,7 +59,7 @@ class ReadPage extends Component<IProps, PageState> {
       link: '',
       body: ''
     },
-    drawShow: false
+    catelogueShow: false
   }
 
   config: Config = {
@@ -120,35 +121,38 @@ class ReadPage extends Component<IProps, PageState> {
   }
 
   render () {
-    const { chaptersData, chapter, drawShow, page } = this.state
+    const { chaptersData, chapter, catelogueShow, page } = this.state
     const isLastChapter = chapter.index === chaptersData.chapters.length - 1
     const isFirstChapter = chapter.index === 0
     return (
       <View className='read'>
         <Catelogue
-          show={drawShow}
+          show={catelogueShow}
           activeIndex={chapter.index}
           chaptersData={chaptersData}
           onItemClick={(index: number) => {
             this.loadChapter(index)
             this.setState({ page: 0 })
           }}
-          onClose={() => this.setState({ drawShow: false })}
+          onClose={() => this.setState({ catelogueShow: false })}
         />
         <Article
           title={chapter.title}
           content={chapter.body}
           page={page}
-          onCenterButtonClick={() => {this.setState({ drawShow: true })}}
+          onCenterButtonClick={() => {this.setState({ catelogueShow: true })}}
           onSwiper={(page: number) => this.setState({ page })}
           onScrollPrev={() => this.loadChapter(chapter.index - 1)}
           onScrollNext={this.handleChapterNext}
+        />
+        <SettingsBar
+          show
         />
         {/* <ScrollView
           className='read__scroll'
           scrollY
         >
-          <Button onClick={() => this.setState({ drawShow: true })}>目录</Button>
+          <Button onClick={() => this.setState({ catelogueShow: true })}>目录</Button>
           <Button onClick={this.handleAddUserBook}>加入书架</Button>
           {!isFirstChapter && <Button onClick={() => this.loadChapter(chapter.index - 1)}>{'上一章'}</Button>}
           <Button disabled={isLastChapter} onClick={() => this.loadChapter(chapter.index + 1)}>{isLastChapter ? '已是最后一章' : '下一章'}</Button>
