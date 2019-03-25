@@ -1,0 +1,29 @@
+
+.article {
+  width: 100%;
+  height: 100%;
+  padding: 4px 0 2px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  &__content {
+    height: 100%;
+    margin: 0;
+    font-size: 38px;
+    line-height: 1.8;
+  
+    // 为文章分页分栏
+    columns: 750px auto;
+    column-gap: 0;
+  }
+
+  &__title {
+    padding-left: 30px;
+    padding-right: 20px;
+  }
+  &__p {
+    text-indent: 2em;
+    padding-left: 30px;
+    padding-right: 20px;
+  }
+}
