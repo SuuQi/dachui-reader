@@ -1,2 +1,2 @@
 # dachui-reader
-大锤阅读器
+大锤读书

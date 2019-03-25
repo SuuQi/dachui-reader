@@ -62,7 +62,7 @@ class ReadPage extends Component<IProps, PageState> {
   }
 
   config: Config = {
-    navigationBarTitleText: '大锤阅读器'
+    navigationBarTitleText: '大锤读书'
   }
 
   /** 初始化操作 */
@@ -94,7 +94,7 @@ class ReadPage extends Component<IProps, PageState> {
       // Taro.pageScrollTo({ scrollTop: 0, duration: 0 })
       Taro.hideLoading()
     })
-    chaptersData.id && await this.props.updateUserBook({
+    chaptersData.id && this.props.updateUserBook({
       id: chaptersData.id,
       lastIndex: chapter.index,
     })

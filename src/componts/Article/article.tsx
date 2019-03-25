@@ -133,7 +133,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   onTouchEnd = () => {
     if (!this.moveTouch) return
     const { x: startX } = this.touchDetail
-    let { minOffset, backTransition, page } = this.props
+    let { minOffset, backTransition } = this.props
     let { currentPage } = this.state
     const offsetX = this.moveTouch.clientX - startX
     if (offsetX > minOffset) {
