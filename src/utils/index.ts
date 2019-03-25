@@ -1,4 +1,4 @@
-import Taro from '@tarojs/taro'
+import Taro, { clientRectElement } from '@tarojs/taro'
 import { fetchLoginInfo } from '../actions/user'
 import store from '../store'
 import { SESSION_KEY } from '../constants/user'
@@ -12,3 +12,17 @@ export async function login () {
     await Taro.setStorage({ key: SESSION_KEY, data: loginInfo.sessionId })
     Taro.hideLoading()
 }
+
+export function getBoundingClientRect (selector: string, root?: any): Promise<clientRectElement> {
+  return new Promise(resolve => {
+    const query = Taro.createSelectorQuery()
+    root && query.in(process.env.TARO_ENV === 'h5' ? root : root.$scope)
+    query
+      .select(selector)
+      .boundingClientRect(rect => {
+        resolve(Array.isArray(rect) ? rect[0] : rect)
+      })
+      .exec()
+  })
+}
+

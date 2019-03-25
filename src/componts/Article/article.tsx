@@ -4,6 +4,7 @@ import { View } from '@tarojs/components'
 import { ITouchEvent, ITouch } from '@tarojs/components/types/common';
 import memoize from 'lodash/memoize'
 import noop from 'lodash/noop'
+import { getBoundingClientRect } from '../../utils';
 
 type DefaultProps = {
   title: string
@@ -40,9 +41,6 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   }
   moveTouch?: ITouch
 
-  /** 是否已经计算出页面总宽度 */
-  private __isResized__: boolean = false
-
   state = {
     scrollLeft: 0,
     transition: 0,
@@ -61,47 +59,35 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     onScrollNext: noop
   }
 
-  componentWillReceiveProps (nextProps: ComponentProps) {
-    if (this.props.content !== nextProps.content) {
-      this.__isResized__ = false
-    }
-  }
-
   /** 设置宽高值、预设值 */
-  private __resize__ () {
-    if (this.__isResized__) return
-    Taro.createSelectorQuery()
-      .in(process.env.TARO_ENV === 'h5' ? this : this.$scope)
-      .select('.article')
-      .boundingClientRect(rect => {
-        rect = Array.isArray(rect) ? rect[0] : rect
-        this.wrapWidth = rect.width
-        this.wrapHeight = rect.height
-      })
-      .exec()
+  private async __resize__ () {
+    const [ wrapRect, contentRect, lastPRect ] = await Promise.all([
+      getBoundingClientRect('.article', this),
+      getBoundingClientRect('.article-content', this),
+      getBoundingClientRect('.article-p-last', this)
+    ])
+
+    // 设置容器宽高
+    this.wrapWidth = wrapRect.width
+    this.wrapHeight = wrapRect.height
     
-    Taro.createSelectorQuery()
-    .in(process.env.TARO_ENV === 'h5' ? this : this.$scope)
-    .select('.article-p-last')
-    .boundingClientRect(rect => {
-      rect = Array.isArray(rect) ? rect[0] : rect
-      const contentWidth = rect.width + rect.left - this.state.scrollLeft
-      const pageCount = Math.round(contentWidth / this.wrapWidth + this.props.page)
-      console.log(pageCount)
-      if (pageCount !== this.state.pageCount && pageCount > 1) {
-        this.__isResized__ = true
-        this.setState({ pageCount })
-      }
-    })
-    .exec()
+    // 计算和设置总页数
+    const pageCount = Math.round((lastPRect.width + lastPRect.left - contentRect.left) / this.wrapWidth)
+    if (pageCount !== this.state.pageCount && pageCount > 1) {
+      setTimeout(() => {
+        pageCount !== this.state.pageCount && this.setState({ pageCount })
+      }, 0)
+    }
   }
 
   componentDidShow () {
     this.__resize__()
   }
 
-  componentDidUpdate () {
-    this.__resize__()
+  componentDidUpdate (prevProps: ComponentProps) {
+    if (prevProps.content !== this.props.content) {
+      this.__resize__()
+    }
   }
 
   /** 触摸滑动开始，记录初始值和初始化 */
@@ -201,7 +187,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
         onTouchEnd={this.onTouchEnd}
         onClick={this.onClickHandle}
       >
-        <View className="article__content"
+        <View className="article__content article-content"
           style={{
             transform: `translate3d(${activePage * this.wrapWidth * -1 + scrollLeft}px, 0, 0)`,
             transition: `transform ${transition}s`

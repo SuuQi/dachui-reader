@@ -50,14 +50,14 @@ export default class Catelogue extends Component<ComponentProps, ComponentState>
   }
 
   render () {
-    const { chaptersData, show, activeIndex } = this.props
+    const { chaptersData, show, activeIndex, onClose } = this.props
     const { scrollIntoView, showDate } = this.state
     return (
         <AtDrawer
           className='catelogue'
           show={show}
           mask
-          onClose={this.props.onClose}
+          onClose={onClose}
           width='75%'
         >
           <ScrollView
