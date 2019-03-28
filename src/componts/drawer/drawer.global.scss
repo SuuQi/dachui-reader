@@ -1,0 +1,27 @@
+
+// fix微信局部组件不能引用，需要在全局app.scss引用
+.at-drawer {
+  &--vertical &__content {
+    top: auto;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    overflow-y: hidden;
+  }
+
+  &--top &__content {
+    top: 0;
+    transform: translateY(-100%);
+  }
+
+  &--bottom &__content {
+    bottom: 0;
+    transform: translateY(100%);
+  }
+
+  &--show &__content {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+  

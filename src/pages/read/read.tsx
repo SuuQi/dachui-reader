@@ -28,6 +28,7 @@ type PageState = {
   chaptersData: IChaptersData
   chapter: IChapterItem
   catelogueShow: boolean
+  settingsShow: boolean
 
   /** 当前页 */
   page: number
@@ -59,7 +60,8 @@ class ReadPage extends Component<IProps, PageState> {
       link: '',
       body: ''
     },
-    catelogueShow: false
+    catelogueShow: false,
+    settingsShow: false
   }
 
   config: Config = {
@@ -121,7 +123,7 @@ class ReadPage extends Component<IProps, PageState> {
   }
 
   render () {
-    const { chaptersData, chapter, catelogueShow, page } = this.state
+    const { chaptersData, chapter, catelogueShow, settingsShow, page } = this.state
     const isLastChapter = chapter.index === chaptersData.chapters.length - 1
     const isFirstChapter = chapter.index === 0
     return (
@@ -136,17 +138,20 @@ class ReadPage extends Component<IProps, PageState> {
           }}
           onClose={() => this.setState({ catelogueShow: false })}
         />
+        <SettingsBar
+          show={settingsShow}
+          onClose={() => this.setState({ settingsShow: false })}
+          onCatelogueClick={() => this.setState({ settingsShow: false, catelogueShow: true })}
+          onAddBookClick={this.handleAddUserBook}
+        />
         <Article
           title={chapter.title}
           content={chapter.body}
           page={page}
-          onCenterButtonClick={() => {this.setState({ catelogueShow: true })}}
+          onCenterButtonClick={() => {this.setState({ settingsShow: true })}}
           onSwiper={(page: number) => this.setState({ page })}
           onScrollPrev={() => this.loadChapter(chapter.index - 1)}
           onScrollNext={this.handleChapterNext}
-        />
-        <SettingsBar
-          show
         />
         {/* <ScrollView
           className='read__scroll'
