@@ -104,7 +104,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
 
   /** 触摸滑动开始，记录初始值和初始化 */
   onTouchStart = (e: ITouchEvent) => {
-    e.stopPropagation()
+    // e.stopPropagation()
     if (this.animating) return
     const touch = e.touches[0]
     this.moveTouch = undefined
@@ -120,6 +120,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
 
   /** 触摸滑动过程中，滑动及记录 */
   onTouchMove = (e: ITouchEvent) => {
+    /** fixed ios上下橡皮筋效果 */
     e.stopPropagation()
     if (this.animating) return
     const touch = e.touches[0]
@@ -132,8 +133,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   }
 
   /** 触摸滑动结束，设置值以及回弹 */
-  onTouchEnd = (e: ITouchEvent) => {
-    e.stopPropagation()
+  onTouchEnd = () => {
     if (!this.moveTouch) return
     const { x: startX } = this.touchDetail
     let { minOffset, backTransition } = this.props
@@ -150,7 +150,6 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     const transition = this.swiperChange(currentPage) ? backTransition : 0
     this.setState({
       translateX: 0,
-      currentPage,
       transition,
     }, async () => {
       /** 等待动画结束 */
@@ -175,6 +174,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     } else {
       currentPage--
     }
+    this.setState({ currentPage })
     this.swiperChange(currentPage)
   }
 
