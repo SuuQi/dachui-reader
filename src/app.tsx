@@ -2,7 +2,7 @@ import '@tarojs/async-await'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 
-import Index from './pages/index'
+import Index from './pages/about/about'
 
 import store from './store'
 import './app.scss'
@@ -33,7 +33,7 @@ class App extends Component {
     pages: [
       'pages/bookshelf/bookshelf',
       'pages/bookstore/bookstore',
-      'pages/index/index',
+      'pages/about/about',
       'pages/read/read'
     ],
     tabBar: {
@@ -48,7 +48,7 @@ class App extends Component {
           text: '书城'
         },
         {
-          pagePath: 'pages/index/index',
+          pagePath: 'pages/about/about',
           text: '关于'
         }
       ]

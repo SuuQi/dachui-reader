@@ -3,7 +3,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
-import './index.scss'
+import './about.scss'
 
 type PageStateProps = {
 }
@@ -12,7 +12,6 @@ type PageDispatchProps = {
 }
 
 type PageOwnProps = {
-  
 }
 
 type PageState = {
@@ -23,13 +22,13 @@ type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 @connect(() => ({
 }), () => ({
 }))
-class Index extends Component<IProps, PageState> {
+class About extends Component<IProps, PageState> {
 
   config: Config = {
-    navigationBarTitleText: '首页'
+    navigationBarTitleText: '关于'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps (nextProps: IProps) {
     console.log(this.props, nextProps)
   }
 
@@ -42,10 +41,10 @@ class Index extends Component<IProps, PageState> {
   render () {
     return (
       <View className='index'>
-        <View>Hello, 首页</View>
+        <View>大锤读书： 免费、绿色、无广告的读书应用！</View>
       </View>
     )
   }
 }
 
-export default Index as ComponentClass<PageOwnProps, PageState>
+export default About as ComponentClass<PageOwnProps, PageState>
