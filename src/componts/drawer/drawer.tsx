@@ -3,13 +3,12 @@ import './drawer.scss'
 import classnames from 'classnames'
 import { AtDrawer } from 'taro-ui'
 import { AtDrawerProps } from 'taro-ui/@types/drawer';
-import { View } from '@tarojs/components';
 
 type DefaultProps = {
   type: 'top' | 'bottom'
 }
 
-interface ComponentProps extends DefaultProps {
+export interface ComponentProps extends DefaultProps {
 }
 
 type ComponentState = {
@@ -26,6 +25,7 @@ export default class Catelogue extends Component<ComponentProps & AtDrawerProps,
     const {
       className,
       type,
+      children,
       // width,
       // right,
       
@@ -51,11 +51,7 @@ export default class Catelogue extends Component<ComponentProps & AtDrawerProps,
         onClose={onClose}
         customStyle={customStyle}
       >
-        {/* <View className='at-row'>
-          <View className='at-col' onClick={e => console.log(e)}>目录</View>
-          <View className='at-col'>设置</View>
-          <View className='at-col'>分享</View>
-        </View> */}
+        {children}
       </AtDrawer>
     )
   }

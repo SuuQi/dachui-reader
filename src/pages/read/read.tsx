@@ -139,6 +139,7 @@ class ReadPage extends Component<IProps, PageState> {
           onClose={() => this.setState({ catelogueShow: false })}
         />
         <SettingsBar
+          type='top'
           show={settingsShow}
           onClose={() => this.setState({ settingsShow: false })}
           onCatelogueClick={() => this.setState({ settingsShow: false, catelogueShow: true })}

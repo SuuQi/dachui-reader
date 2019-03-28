@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import './settingsBar.scss'
-import { View } from '@tarojs/components'
-import Drawer from '../../componts/drawer/drawer'
+import Drawer, { ComponentProps as IDrawerProps } from '../../componts/drawer/drawer'
 import noop from 'lodash/noop';
+import { View } from '@tarojs/components';
 
 type DefaultProps = {
   onCatelogueClick: () => void
@@ -10,6 +10,7 @@ type DefaultProps = {
 }
 
 interface ComponentProps extends DefaultProps {
+  type: IDrawerProps['type']
   onClose?: () => void
   show: boolean
 }
@@ -25,9 +26,10 @@ export default class SettingsBar extends Component<ComponentProps, ComponentStat
   }
 
   render () {
-    const { show, onClose, onCatelogueClick, onAddBookClick } = this.props
+    const { show, onClose, onCatelogueClick, onAddBookClick, type } = this.props
     return (
       <Drawer
+        type={type}
         className='catelogue'
         show={show}
         mask
@@ -37,7 +39,13 @@ export default class SettingsBar extends Component<ComponentProps, ComponentStat
           index === 0 && onCatelogueClick()
           index === 1 && onAddBookClick()
         }}
-      />
+      >
+        {/* <View className='at-row'>
+          <View className='at-col' onClick={e => console.log(e)}>目录</View>
+          <View className='at-col'>设置</View>
+          <View className='at-col'>分享</View>
+        </View> */}
+      </Drawer>
     )
   }
 }
