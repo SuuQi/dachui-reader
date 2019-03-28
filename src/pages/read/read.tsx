@@ -1,16 +1,17 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, ScrollView } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import pick from 'lodash/pick'
 
 import './read.scss'
-import { IChaptersData, IChapterItem, IChapterOrigin, IUserBookItem } from '../../constants/book'
+import { IChaptersData, IChapterItem, IUserBookItem } from '../../constants/book'
 import { fetchBookChapters, fetchBookChapterText } from '../../actions/book'
 import Catelogue from '../../componts/catelogue/catelogue'
 import { addUserBook, updateUserBook } from '../../actions/user'
 import Article from '../../componts/article/article'
 import SettingsBar from './settingsBar'
+import { setReadIndexStorage, getReadIndexStorage } from './read.utils';
+import clone from 'lodash/clone';
 
 type PageStateProps = {
 }
@@ -31,7 +32,7 @@ type PageState = {
   settingsShow: boolean
 
   /** 当前页 */
-  page: number
+  // page: number
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -46,7 +47,6 @@ type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 class ReadPage extends Component<IProps, PageState> {
 
   state: PageState = {
-    page: 0,
     chaptersData: {
       id: '',
       book: '',
@@ -58,7 +58,8 @@ class ReadPage extends Component<IProps, PageState> {
       index: 0,
       title: '',
       link: '',
-      body: ''
+      body: '',
+      pageIndex: 0
     },
     catelogueShow: false,
     settingsShow: false
@@ -80,25 +81,32 @@ class ReadPage extends Component<IProps, PageState> {
     chaptersData.id = chaptersData._id
     this.setState({ chaptersData })
     const index = Number(params.index) || 0
-    await this.loadChapter(index, chaptersData.chapters[index])
+    await this.loadChapter(index, chaptersData.chapters[index], chaptersData.id)
     Taro.hideLoading()
   }
 
   /** 加载章节 */
-  loadChapter = async (index: number, originChapter?: IChapterOrigin) => {
+  loadChapter = async (index: number, originChapter = this.state.chaptersData.chapters[index], bookId = this.state.chaptersData.id) => {
     Taro.showLoading({ title: '正在加载...' })
     const { fetchBookChapterText } = this.props
-    const { chaptersData } = this.state
-    const chapter = (originChapter || chaptersData.chapters[index]) as IChapterItem
-    const chapterData = await fetchBookChapterText(chapter.link)
+    const chapter = clone(originChapter) as IChapterItem
+    const [chapterData, readIndexData] = await Promise.all([
+      fetchBookChapterText(chapter.link),
+      getReadIndexStorage(bookId)
+    ])
     chapter.body = chapterData.chapter.body
     chapter.index = index
+    if (readIndexData.chapterIndex === index) {
+      chapter.pageIndex = readIndexData.pageIndex
+    } else {
+      chapter.pageIndex = 0
+      setReadIndexStorage(bookId, index, 0)
+    }
     this.setState({ chapter }, () => {
-      // Taro.pageScrollTo({ scrollTop: 0, duration: 0 })
       Taro.hideLoading()
     })
-    chaptersData.id && this.props.updateUserBook({
-      id: chaptersData.id,
+    bookId && this.props.updateUserBook({
+      id: bookId,
       lastIndex: chapter.index,
     })
   }
@@ -115,17 +123,31 @@ class ReadPage extends Component<IProps, PageState> {
       title: '加入成功'
     })
   }
+  
+  handleChapterPrev = async () => {
+    const { chapter, chaptersData } = this.state
+    const isFirstChapter = chapter.index === 0
+    if (isFirstChapter) {
+      Taro.showToast({ title: '已是第一章' })
+    } else {
+      // 设置一个很大的值以确保在最后一页
+      await setReadIndexStorage(chaptersData.id, chapter.index - 1, 9999)
+      await this.loadChapter(chapter.index - 1)
+    }
+  }
 
   handleChapterNext = async () => {
-    const { chapter } = this.state
-    await this.loadChapter(chapter.index + 1)
-    this.setState({ page: 0 })
+    const { chaptersData, chapter } = this.state
+    const isLastChapter = chapter.index === chaptersData.chapters.length - 1
+    if (isLastChapter) {
+      Taro.showToast({ title: '已是最后一章' })
+    } else {
+      await this.loadChapter(chapter.index + 1)
+    }
   }
 
   render () {
-    const { chaptersData, chapter, catelogueShow, settingsShow, page } = this.state
-    const isLastChapter = chapter.index === chaptersData.chapters.length - 1
-    const isFirstChapter = chapter.index === 0
+    const { chaptersData, chapter, catelogueShow, settingsShow } = this.state
     return (
       <View className='read'>
         <Catelogue
@@ -134,7 +156,6 @@ class ReadPage extends Component<IProps, PageState> {
           chaptersData={chaptersData}
           onItemClick={(index: number) => {
             this.loadChapter(index)
-            this.setState({ page: 0 })
           }}
           onClose={() => this.setState({ catelogueShow: false })}
         />
@@ -148,10 +169,13 @@ class ReadPage extends Component<IProps, PageState> {
         <Article
           title={chapter.title}
           content={chapter.body}
-          page={page}
+          page={chapter.pageIndex}
           onCenterButtonClick={() => {this.setState({ settingsShow: true })}}
-          onSwiper={(page: number) => this.setState({ page })}
-          onScrollPrev={() => this.loadChapter(chapter.index - 1)}
+          onSwiper={(pageIndex: number) => {
+            this.setState({ chapter: { ...chapter, pageIndex } })
+            setReadIndexStorage(chaptersData.id, chapter.index, pageIndex)
+          }}
+          onScrollPrev={this.handleChapterPrev}
           onScrollNext={this.handleChapterNext}
         />
         {/* <ScrollView

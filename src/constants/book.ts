@@ -21,6 +21,8 @@ export interface IChapterOrigin {
 export interface IChapterItem extends IChapterOrigin {
   index: number
   body: string
+  /** 当前阅读到哪一页 */
+  pageIndex: number
 }
 
 interface IChaptersDataOrigin {

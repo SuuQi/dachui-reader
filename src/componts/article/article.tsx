@@ -162,7 +162,8 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   onClickHandle = async (e: ITouchEvent) => {
     if (this.animating) return
     let { centerButtonWidth, onCenterButtonClick } = this.props
-    let { currentPage } = this.state
+    const { currentPage, pageCount } = this.state
+    let nextPage = this.getSafePageIndex(currentPage, pageCount - 1)
     const offsetMiddleX = e.detail.x - this.wrapWidth / 2
     const offsetMiddleY = e.detail.y - this.wrapHeight / 2
     if (Math.abs(offsetMiddleX) < centerButtonWidth / 2 && offsetMiddleY < centerButtonWidth / 2) {
@@ -170,11 +171,11 @@ export default class Article extends Component<ComponentProps, ComponentState> {
       return onCenterButtonClick()
     }
     if (offsetMiddleX > 0) {
-      currentPage++
+      nextPage++
     } else {
-      currentPage--
+      nextPage--
     }
-    this.swiperChange(currentPage)
+    this.swiperChange(nextPage)
   }
 
   /** 改变page, 返回是否成功 */
@@ -199,14 +200,16 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   /** 缓存获取到的数组 */
   getContentArray = memoize((content: string) => content.split('\n'))
 
+  // 校验安全props
+  getSafePageIndex = (page: number, pageMax: number) => Math.max(0, Math.min(page, pageMax))
+
   render () {
     const { title, content } = this.props
     const { translateX, transition, pageCount, currentPage } = this.state
     const contentArray = this.getContentArray(content)
     const contentArrayLength = contentArray.length
 
-    // 校验props
-    const activePage = Math.max(0, Math.min(currentPage, pageCount - 1))
+    const activePage = this.getSafePageIndex(currentPage, pageCount - 1)
 
     return (
       <View
