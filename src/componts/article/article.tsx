@@ -222,7 +222,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
         <View className="article__content article-content"
           style={{
             transform: `translate3d(${activePage * this.wrapWidth * -1 + translateX}px, 0, 0)`,
-            transition: `transform ${transition}s`
+            transition: `transform ${transition}s ease-out`
           }}
         >
           <View className='article__title'>
