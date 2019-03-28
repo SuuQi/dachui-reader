@@ -174,7 +174,6 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     } else {
       currentPage--
     }
-    this.setState({ currentPage })
     this.swiperChange(currentPage)
   }
 
@@ -183,14 +182,15 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     const { onSwiper, onScrollPrev, onScrollNext } = this.props
     const { pageCount } = this.state
     if (page < 0) {
+      this.setState({ currentPage: 0 })
       onScrollPrev()
-      // this.props.onSwiper(0)
       return false
     } else if (page > pageCount - 1) {
+      this.setState({ currentPage: pageCount - 1 })
       onScrollNext()
-      // this.props.onSwiper(pageCount - 1)
       return false
     } else {
+      this.setState({ currentPage: page })
       onSwiper(page)
       return true
     }
@@ -206,7 +206,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     const contentArrayLength = contentArray.length
 
     // 校验props
-    const activePage = Math.max(0, Math.min(currentPage, pageCount))
+    const activePage = Math.max(0, Math.min(currentPage, pageCount - 1))
 
     return (
       <View

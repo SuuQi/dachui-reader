@@ -41,6 +41,7 @@ export function fetchAjax ({ url, method = 'GET', type, data = {}, showLoading =
     return Taro.request({
         url,
         method,
+        timeout: 20000,
         header: {
           'x-reader-session': Taro.getStorageSync(SESSION_KEY) || ''
         },
