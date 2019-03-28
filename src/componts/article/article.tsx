@@ -137,17 +137,18 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     if (!this.moveTouch) return
     const { x: startX } = this.touchDetail
     let { minOffset, backTransition } = this.props
-    let { currentPage } = this.state
+    const { currentPage, pageCount } = this.state
+    let safeCurrentPage = this.getSafePageIndex(currentPage, pageCount - 1)
     const offsetX = this.moveTouch.clientX - startX
     if (offsetX > minOffset) {
-      currentPage--
+      safeCurrentPage--
     } else if (offsetX < -minOffset) {
-      currentPage++
+      safeCurrentPage++
     }
 
     this.moveTouch = undefined
     this.animating = true
-    const transition = this.swiperChange(currentPage) ? backTransition : 0
+    const transition = this.swiperChange(safeCurrentPage) ? backTransition : 0
     this.setState({
       translateX: 0,
       transition,
@@ -163,7 +164,7 @@ export default class Article extends Component<ComponentProps, ComponentState> {
     if (this.animating) return
     let { centerButtonWidth, onCenterButtonClick } = this.props
     const { currentPage, pageCount } = this.state
-    let nextPage = this.getSafePageIndex(currentPage, pageCount - 1)
+    let safeCurrentPage = this.getSafePageIndex(currentPage, pageCount - 1)
     const offsetMiddleX = e.detail.x - this.wrapWidth / 2
     const offsetMiddleY = e.detail.y - this.wrapHeight / 2
     if (Math.abs(offsetMiddleX) < centerButtonWidth / 2 && offsetMiddleY < centerButtonWidth / 2) {
@@ -171,11 +172,11 @@ export default class Article extends Component<ComponentProps, ComponentState> {
       return onCenterButtonClick()
     }
     if (offsetMiddleX > 0) {
-      nextPage++
+      safeCurrentPage++
     } else {
-      nextPage--
+      safeCurrentPage--
     }
-    this.swiperChange(nextPage)
+    this.swiperChange(safeCurrentPage)
   }
 
   /** 改变page, 返回是否成功 */
