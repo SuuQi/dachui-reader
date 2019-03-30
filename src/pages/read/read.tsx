@@ -37,7 +37,7 @@ type PageState = {
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-@connect(({ book }) => ({
+@connect(() => ({
 }), (dispatch) => ({
   fetchBookChapters: (bookId: string) => dispatch(fetchBookChapters(bookId)),
   fetchBookChapterText: (link: string) => dispatch(fetchBookChapterText(link)),
