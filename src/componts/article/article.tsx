@@ -33,6 +33,12 @@ type ComponentState = {
   currentPage: number
 }
 
+/**
+ * 文章组件
+ * @export
+ * @class Article
+ * @extends {Component<ComponentProps, ComponentState>}
+ */
 export default class Article extends Component<ComponentProps, ComponentState> {
 
   /** 正在动画中 */

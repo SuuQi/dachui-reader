@@ -22,6 +22,12 @@ type ComponentState = {
   scrollIntoView?: string
 }
 
+/**
+ * 目录组件
+ * @export
+ * @class Catelogue
+ * @extends {Component<ComponentProps, ComponentState>}
+ */
 export default class Catelogue extends Component<ComponentProps, ComponentState> {
 
   static defaultProps: DefaultProps = {

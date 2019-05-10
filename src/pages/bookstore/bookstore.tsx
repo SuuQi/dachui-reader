@@ -2,12 +2,12 @@ import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
-import { AtSearchBar, AtList, AtListItem } from 'taro-ui'
+import { AtSearchBar } from 'taro-ui'
 
 import './bookstore.scss'
 import { fuzzySearch, clearFuzzySearch } from '../../actions/book'
-import { SERVER_STATICS_ROOT } from '../../constants'
 import { IBookItem } from '../../constants/book'
+import BookItem from '../../componts/bookItem/bookItem';
 
 type PageStateProps = {
   searchList: IBookItem[]
@@ -75,21 +75,15 @@ class Bookstore extends Component<IProps, PageState> {
           onConfirm={this.handleSearchClick}
           onActionClick={this.handleSearchClick}
         />
-        <AtList>
-          {
-            searchList.slice(0, 20).map(book => 
-              <AtListItem
-                key={`bookitem-${book.id}`}
-                title={book.title}
-                note={book.shortIntro}
-                extraText='查看'
-                arrow='right'
-                thumb={`${SERVER_STATICS_ROOT}${book.cover}`}
-                onClick={() => this.handleBookItemClick(book)}
-              />
-            )
-          }
-        </AtList>
+        {
+          searchList.slice(0, 20).map(book => 
+            <BookItem
+              key={`bookitem-${book.id}`}
+              data={book}
+              onClick={this.handleBookItemClick}
+            />
+          )
+        }
       </View>
     )
   }
