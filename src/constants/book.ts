@@ -37,9 +37,12 @@ export interface IChaptersData extends IChaptersDataOrigin {
 }
 
 export interface IUserBookItem extends IChaptersDataOrigin {
-  title: string
+  title: string,
+  cover: string,
+  author: string,
   lastIndex: number
 }
 
 export const FETCH_BOOK_CHAPTERS = Symbol('FETCH_BOOK_CHAPTERS')
+export const FETCH_BOOK_DETAIL = Symbol('FETCH_BOOK_DETAIL')
 export const FETCH_CHAPTER_TEXT = Symbol('FETCH_CHAPTER_TEXT')

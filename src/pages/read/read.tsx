@@ -5,13 +5,14 @@ import { connect } from '@tarojs/redux'
 
 import './read.scss'
 import { IChaptersData, IChapterItem, IUserBookItem } from '../../constants/book'
-import { fetchBookChapters, fetchBookChapterText } from '../../actions/book'
+import { fetchBookChapters, fetchBookChapterText, fetchBookDetail } from '../../actions/book'
 import Catelogue from '../../componts/catelogue/catelogue'
 import { addUserBook, updateUserBook } from '../../actions/user'
 import Article from '../../componts/article/article'
 import SettingsBar from './settingsBar'
 import { setReadIndexStorage, getReadIndexStorage } from './read.utils';
 import clone from 'lodash/clone';
+import pick from 'lodash/pick';
 
 type PageStateProps = {
 }
@@ -19,6 +20,7 @@ type PageStateProps = {
 type PageDispatchProps = {
   fetchBookChapters: (bookId: string) => any
   fetchBookChapterText: (link: string) => any
+  fetchBookDetail: (bookId: string) => any
   addUserBook: (book: IUserBookItem) => any
   updateUserBook: (book: Partial<IUserBookItem>) => any
 }
@@ -41,6 +43,7 @@ type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 }), (dispatch) => ({
   fetchBookChapters: (bookId: string) => dispatch(fetchBookChapters(bookId)),
   fetchBookChapterText: (link: string) => dispatch(fetchBookChapterText(link)),
+  fetchBookDetail: (bookId: string) => dispatch(fetchBookDetail(bookId)),
   addUserBook: (book: IUserBookItem) => dispatch(addUserBook(book)),
   updateUserBook: (book: Partial<IUserBookItem>) => dispatch(updateUserBook(book))
 }))
@@ -114,9 +117,13 @@ class ReadPage extends Component<IProps, PageState> {
   /** 加入书架 */
   handleAddUserBook = async () => {
     const { params } = this.$router
-    await this.props.addUserBook({
-      ...this.state.chaptersData,
-      lastIndex: this.state.chapter.index,
+    const { chapter, chaptersData } = this.state
+    const { addUserBook, fetchBookDetail } = this.props
+    const bookDetail = await fetchBookDetail(chaptersData.book)
+    await addUserBook({
+      ...chaptersData,
+      ...pick(bookDetail, ['cover', 'author', 'title']),
+      lastIndex: chapter.index,
       title: params.title
     })
     Taro.showToast({

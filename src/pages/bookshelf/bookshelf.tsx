@@ -6,7 +6,7 @@ import { connect } from '@tarojs/redux'
 import './bookshelf.scss'
 import { fetchUserBook } from '../../actions/user'
 import { IUserBookItem } from '../../constants/book'
-import { AtList, AtListItem } from 'taro-ui'
+import UserBookItem from '../../componts/userBookItem/userBookItem';
 
 type PageStateProps = {
   books: IUserBookItem[]
@@ -46,21 +46,17 @@ class Bookshelf extends Component<IProps, PageState> {
     const { books } = this.props
     return (
       <View className='bookshelf'>
-        <AtList>
+        <View className='bookshelf__list'>
           {
             books.slice(0, 20).map(book => 
-              <AtListItem
+              <UserBookItem
                 key={`bookitem-${book.id}`}
-                title={book.title}
-                // note={book.shortIntro}
-                extraText='查看'
-                arrow='right'
-                // thumb={`${SERVER_STATICS_ROOT}${book.cover}`}
-                onClick={() => this.handleBookItemClick(book)}
+                data={book}
+                onClick={this.handleBookItemClick}
               />
             )
           }
-        </AtList>
+        </View>
       </View>
     )
   }

@@ -42,7 +42,7 @@ class About extends Component<IProps, PageState> {
     return (
       <View className='about at-article'>
         <View className='at-article__h2'>
-          关于大锤阅读器
+          关于大锤读书
         </View>
         <Text className='at-article__info' decode>
           2019-05-20&nbsp;&nbsp;&nbsp;大锤爸爸
@@ -51,7 +51,7 @@ class About extends Component<IProps, PageState> {
           <View className='at-article__section'>
             <View className='at-article__h2'></View>
             <View className='at-article__h3'>关于小程序</View>
-            <View className='at-article__p'>“大锤阅读器”是一款免费、绿色、无广告的读书应用。如果喜欢，可以通过点击右上角“添加到我的小程序”和“添加到桌面”保存。</View>
+            <View className='at-article__p'>“大锤读书”是一款免费、绿色、无广告的读书应用。如果喜欢，可以通过点击右上角“添加到我的小程序”和“添加到桌面”保存。</View>
             <View className='at-article__h2'></View>
             <View className='at-article__h3'>关于源码</View>
             <View className='at-article__p'>源码托管在GitHub，搜索 dachui-reader，欢迎Star。</View>

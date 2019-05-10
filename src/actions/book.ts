@@ -1,5 +1,5 @@
 import { fetchAjax } from '../utils'
-import { FETCH_FUZZY_SEARCH, CLEAR_FUZZY_SEARCH, FETCH_BOOK_CHAPTERS, FETCH_CHAPTER_TEXT } from '../constants/book'
+import { FETCH_FUZZY_SEARCH, CLEAR_FUZZY_SEARCH, FETCH_BOOK_CHAPTERS, FETCH_CHAPTER_TEXT, FETCH_BOOK_DETAIL } from '../constants/book'
 import { SERVER_API_ROOT, SERVER_CHAPTER_ROOT } from '../constants'
 
 export function fuzzySearch (query: string) {
@@ -30,5 +30,12 @@ export function fetchBookChapterText (link: string) {
   return fetchAjax({
     type: FETCH_CHAPTER_TEXT,
     url: `${SERVER_CHAPTER_ROOT}/chapter/${encodeURIComponent(link)}`
+  })
+}
+
+export function fetchBookDetail (bookId: string) {
+  return fetchAjax({
+    type: FETCH_BOOK_DETAIL,
+    url: `${SERVER_API_ROOT}/book/${bookId}`
   })
 }

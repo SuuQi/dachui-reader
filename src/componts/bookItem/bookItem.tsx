@@ -13,6 +13,7 @@ type DefaultProps = {
 
 interface ComponentProps extends DefaultProps {
   data: IBookItem
+  className?: string
 }
 
 type ComponentState = {
@@ -31,11 +32,13 @@ export default class BookItem extends Component<ComponentProps, ComponentState> 
   }
 
   render () {
-    const { data } = this.props
+    const { data, className } = this.props
     return (
-      <View className='book-item' onClick={() => this.props.onClick(data)}>
+      <View className={classnames('book-item', className)} onClick={() => this.props.onClick(data)}>
         <View className='book-item__cover'>
-          <Image className='book-item__cover-img' src={`${SERVER_STATICS_ROOT}${data.cover}`} />
+          <View className='book-item__cover-img' style={{
+            backgroundImage: `url(${SERVER_STATICS_ROOT}${data.cover})`
+          }}></View>
         </View>
         <View className='book-item__right'>
           <View className='book-item__right-top'>

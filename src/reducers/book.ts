@@ -1,5 +1,5 @@
-import { createReducer, fetchHandle } from '../utils'
-import { FETCH_FUZZY_SEARCH, CLEAR_FUZZY_SEARCH, IBookItem } from '../constants/book'
+import { createReducer, fetchHandle, defaultSuccessNoData } from '../utils'
+import { FETCH_FUZZY_SEARCH, CLEAR_FUZZY_SEARCH, IBookItem, FETCH_BOOK_DETAIL } from '../constants/book'
 
 export default createReducer({
   isFetching: false,
@@ -20,5 +20,7 @@ export default createReducer({
     ...state,
     searchList: [],
     searchListCount: 0
-  })
+  }),
+
+  [FETCH_BOOK_DETAIL]: fetchHandle(defaultSuccessNoData)
 })
