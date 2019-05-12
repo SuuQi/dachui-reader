@@ -33,6 +33,9 @@ type ComponentState = {
   currentPage: number
 }
 
+const ARTICLE_NO_SHOW_TEXT = '您当前使用的版本过低，已停止服务！'
+const ARTICLE_SAFE_TEXT = '本章节暂不支持阅读，码字员正在紧急搬运中，敬请期待！'
+
 /**
  * 文章组件
  * @export
@@ -205,7 +208,13 @@ export default class Article extends Component<ComponentProps, ComponentState> {
   }
 
   /** 缓存获取到的数组 */
-  getContentArray = memoize((content: string) => content.split('\n'))
+  getContentArray = memoize((content: string) => {
+    if (content.indexOf(ARTICLE_NO_SHOW_TEXT) > -1) {
+      return Array(3).fill(ARTICLE_SAFE_TEXT)
+    } else {
+      return content.split('\n')
+    }
+  })
 
   // 校验安全props
   getSafePageIndex = (page: number, pageMax: number) => Math.max(0, Math.min(page, pageMax))
