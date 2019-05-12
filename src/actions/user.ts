@@ -4,12 +4,13 @@ import { omit } from 'lodash'
 import { FETCH_LOGIN_INFO, FETCH_USER_BOOKS, ADD_USER_BOOK, UPDATE_USER_BOOK } from '../constants/user'
 import { IUserBookItem } from '../constants/book'
 
-export function fetchLoginInfo (code: string) {
+export function fetchLoginInfo (code?: string) {
   return fetchAjax({
     type: FETCH_LOGIN_INFO,
     url: SERVER_ROOT + '/api/wechat/dachui/login',
     data: {
-      code
+      code,
+      isNotWeixin: !!code
     }
   })
 }

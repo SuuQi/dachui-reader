@@ -7,8 +7,13 @@ export * from './reducerUtils'
 
 export async function login () {
     Taro.showLoading({ title: '登录中...' })
-    const loginOriginInfo = await Taro.login()
-    const loginInfo = await store.dispatch( fetchLoginInfo(loginOriginInfo.code) as any )
+    let loginInfo
+    if (process.env.TARO_ENV !== 'weapp') {
+      loginInfo = await store.dispatch( fetchLoginInfo() as any )
+    } else {
+      const loginOriginInfo = await Taro.login()
+      loginInfo = await store.dispatch( fetchLoginInfo(loginOriginInfo.code) as any )
+    }
     await Taro.setStorage({ key: SESSION_KEY, data: loginInfo.sessionId })
     Taro.hideLoading()
 }
