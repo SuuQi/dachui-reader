@@ -38,10 +38,6 @@ class Bookshelf extends Component<IProps, PageState> {
     this.props.fetchUserBook()
   }
 
-  handleBookItemClick = (book: IUserBookItem) => {
-    Taro.navigateTo({ url: `/pages/read/read?id=${book.book}&title=${book.title}&index=${book.lastIndex}` })
-  }
-
   render () {
     const { books } = this.props
     return (
@@ -52,7 +48,6 @@ class Bookshelf extends Component<IProps, PageState> {
               <UserBookItem
                 key={`bookitem-${book.id}`}
                 data={book}
-                onClick={this.handleBookItemClick}
               />
             )
           }

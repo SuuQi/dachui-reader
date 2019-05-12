@@ -7,6 +7,7 @@ import Index from './pages/about/about'
 import store from './store'
 import './app.scss'
 import { getSystemInfo } from './actions/base';
+import { fetchCatsList, fetchHotBookList } from './actions/book';
 
 /** fix window 变量报错 */
 declare global {
@@ -31,21 +32,22 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/home/home',
       'pages/bookshelf/bookshelf',
-      'pages/bookstore/bookstore',
       'pages/about/about',
+      'pages/booksearch/booksearch',
       'pages/read/read'
     ],
     tabBar: {
       position: 'top',
       list: [
         {
-          pagePath: 'pages/bookshelf/bookshelf',
-          text: '追书'
+          pagePath: 'pages/home/home',
+          text: '首页'
         },
         {
-          pagePath: 'pages/bookstore/bookstore',
-          text: '书城'
+          pagePath: 'pages/bookshelf/bookshelf',
+          text: '书架'
         },
         {
           pagePath: 'pages/about/about',
@@ -56,7 +58,7 @@ class App extends Component {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
+      navigationBarTitleText: '大锤读书',
       navigationBarTextStyle: 'black'
     }
   }
@@ -82,6 +84,8 @@ class App extends Component {
   }
 }
 
+store.dispatch(fetchCatsList() as any)
+store.dispatch(fetchHotBookList() as any)
 getSystemInfo().then(store.dispatch)
 
 Taro.render(<App />, document.getElementById('app'))

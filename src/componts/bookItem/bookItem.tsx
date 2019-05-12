@@ -1,19 +1,18 @@
 import Taro, { Component } from '@tarojs/taro'
 import './bookItem.scss'
 import classnames from 'classnames'
-import noop from 'lodash/noop'
 import { IBookItem } from '../../constants/book'
-import { View, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { SERVER_STATICS_ROOT } from '../../constants';
 import { AtTag } from 'taro-ui';
 
 type DefaultProps = {
-  onClick: (data: IBookItem) => void
 }
 
 interface ComponentProps extends DefaultProps {
   data: IBookItem
   className?: string
+  onClick?: (data: IBookItem) => void
 }
 
 type ComponentState = {
@@ -28,13 +27,22 @@ type ComponentState = {
 export default class BookItem extends Component<ComponentProps, ComponentState> {
 
   static defaultProps: DefaultProps = {
-    onClick: noop
+  }
+
+  handleClick = () => {
+    const { data } = this.props
+    if (this.props.onClick) {
+      this.props.onClick(data)
+    } else {
+      Taro.navigateTo({ url: `/pages/read/read?id=${data.id}&title=${data.title}` })
+    }
   }
 
   render () {
     const { data, className } = this.props
+    if (!data) return null
     return (
-      <View className={classnames('book-item', className)} onClick={() => this.props.onClick(data)}>
+      <View className={classnames('book-item', className)} onClick={this.handleClick}>
         <View className='book-item__cover'>
           <View className='book-item__cover-img' style={{
             backgroundImage: `url(${SERVER_STATICS_ROOT}${data.cover})`
@@ -47,14 +55,13 @@ export default class BookItem extends Component<ComponentProps, ComponentState> 
           </View>
           <View className='book-item__right-bottom'>
             <View className='book-item__author'>{data.author}</View>
-            {/* <View className='book-item__tag'>{data.cat}</View> */}
-            <AtTag 
-              type='primary'
-              size='small'
-              circle
-            >
-              {data.cat}
-            </AtTag>
+            {
+              data.cat.split('-').map((cat, i) => 
+                <View className='book-item__tag' key={'cat-' + i}>
+                  <AtTag type='primary' size='small' circle>{cat}</AtTag>
+                </View>
+              )
+            }
           </View>
         </View>
       </View>

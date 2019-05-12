@@ -43,6 +43,16 @@ export interface IUserBookItem extends IChaptersDataOrigin {
   lastIndex: number
 }
 
+export type IBookGender = 'male' | 'female'
+export type IBookType = 'hot' | 'new' | 'reputation' | 'over'
+
 export const FETCH_BOOK_CHAPTERS = Symbol('FETCH_BOOK_CHAPTERS')
 export const FETCH_BOOK_DETAIL = Symbol('FETCH_BOOK_DETAIL')
 export const FETCH_CHAPTER_TEXT = Symbol('FETCH_CHAPTER_TEXT')
+export const FETCH_HOT_BOOK_LIST = Symbol('FETCH_HOT_BOOK_LIST')
+export const FETCH_CATS_LIST = Symbol('FETCH_CATS_LIST')
+export const FETCH_CATS_BOOKS_LIST = Symbol('FETCH_CATS_BOOKS_LIST')
+
+
+export const BOOK_DEFAULT_LIMIT = 20
+export const BOOK_CATS_TYPE_ARRAY: IBookType[] = ['hot', 'new', 'reputation', 'over']

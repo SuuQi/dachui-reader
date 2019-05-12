@@ -8,12 +8,12 @@ import { SERVER_STATICS_ROOT } from '../../constants';
 import { AtTag } from 'taro-ui';
 
 type DefaultProps = {
-  onClick: (data: IUserBookItem) => void
 }
 
 interface ComponentProps extends DefaultProps {
   data: IUserBookItem
   className?: string
+  onClick?: (data: IUserBookItem) => void
 }
 
 type ComponentState = {
@@ -28,13 +28,22 @@ type ComponentState = {
 export default class UserBookItem extends Component<ComponentProps, ComponentState> {
 
   static defaultProps: DefaultProps = {
-    onClick: noop
+  }
+
+  handleClick = () => {
+    const { data } = this.props
+    if (this.props.onClick) {
+      this.props.onClick(data)
+    } else {
+      Taro.navigateTo({ url: `/pages/read/read?id=${data.id}&title=${data.title}` })
+    }
   }
 
   render () {
     const { data, className } = this.props
+    if (!data) return null
     return (
-      <View className={classnames('user-book-item', className)} onClick={() => this.props.onClick(data)}>
+      <View className={classnames('user-book-item', className)} onClick={this.handleClick}>
         <View className='user-book-item__cover'>
           <View className='user-book-item__cover-img' style={{
             backgroundImage: `url(${SERVER_STATICS_ROOT}${data.cover})`
