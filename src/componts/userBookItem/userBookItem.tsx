@@ -35,7 +35,7 @@ export default class UserBookItem extends Component<ComponentProps, ComponentSta
     if (this.props.onClick) {
       this.props.onClick(data)
     } else {
-      Taro.navigateTo({ url: `/pages/read/read?id=${data.id}&title=${data.title}` })
+      Taro.navigateTo({ url: `/pages/read/read?id=${data.book}&title=${data.title}` })
     }
   }
 
