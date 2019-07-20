@@ -7,6 +7,7 @@ import './bookshelf.scss'
 import { fetchUserBook } from '../../actions/user'
 import { IUserBookItem } from '../../constants/book'
 import UserBookItem from '../../componts/userBookItem/userBookItem';
+import { AtButton } from 'taro-ui';
 
 type PageStateProps = {
   books: IUserBookItem[]
@@ -44,12 +45,15 @@ class Bookshelf extends Component<IProps, PageState> {
       <View className='bookshelf'>
         <View className='bookshelf__list'>
           {
-            books.slice(0, 20).map(book => 
+            books.map(book => 
               <UserBookItem
                 key={`bookitem-${book.id}`}
                 data={book}
               />
             )
+          }
+          {
+            !books.length && <AtButton type='primary' className='bookshelf__gostore' onClick={() => Taro.switchTab({ url: '/pages/home/home' })}>前往书城找书</AtButton>
           }
         </View>
       </View>

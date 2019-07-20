@@ -43,7 +43,7 @@ class App extends Component {
       list: [
         {
           pagePath: 'pages/home/home',
-          text: '首页'
+          text: '书城'
         },
         {
           pagePath: 'pages/bookshelf/bookshelf',

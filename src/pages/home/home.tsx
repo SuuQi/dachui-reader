@@ -39,6 +39,10 @@ class Bookstore extends Component<IProps, PageState> {
     searchString: ''
   }
 
+  config: Config = {
+    navigationBarTitleText: '书城'
+  }
+
   componentDidHide () {
     this.setState({
       searchString: ''
